@@ -1,22 +1,48 @@
 export '../presentation/dkm/kajian/publish_kajian/publish_kajian_main/publish_kajian_main_screen.dart';
-export '../presentation/all/home/home/main/home_main_screen.dart';
-export '../presentation/all/home/home/information/information_screen.dart';
-export '../presentation/all/home/home/search/search_masjid_screen.dart';
-export '../presentation/all/home/explore/main/postingan_screen.dart';
 
+export '../presentation/all/home/home/main/home_screen.dart';
+export '../presentation/all/home/home/information/information_home_screen.dart';
+export '../presentation/all/home/home/search/search_masjid_home_screen.dart';
+
+//? Post
+export '../presentation/all/home/explore/main/posting_screen.dart';
+export '../presentation/all/home/explore/details/main/detail_posting_screen.dart';
+
+export '../presentation/all/home/home/collaboration/main/collaboration_home_screen.dart';
+export '../presentation/all/home/home/explore/main/explore_home_screen.dart';
+export '../presentation/all/home/home/plan/main/plan_home_screen.dart';
 
 export '../presentation/all/home/donation/main/donation_screen.dart';
-export '../presentation/all/home/donation/detail/donation_confirmation/detail_donation_confirmation_screen.dart';
-
-
+export '../presentation/all/home/donation/details/donation_confirmation/detail_donation_confirmation_screen.dart';
 
 export '../presentation/all/home/pray/main/time_pray_screen.dart';
 
+//? Masjid
 export '../presentation/all/home/masjids/main/masjids_main_screen.dart';
 export '../presentation/all/home/masjids/details/profile/main/profile_main_screen.dart';
+export '../presentation/all/home/masjids/details/information/main/information_masjid_screen.dart';
+export '../presentation/all/home/masjids/details/financial_report/main/financial_report_masjid_screen.dart';
+export '../presentation/all/home/masjids/details/absence_study/main/absence_study_masjid_screen.dart';
+export '../presentation/all/home/masjids/details/agenda/main/agenda_masjid_screen.dart';
+export '../presentation/all/home/masjids/details/certificate/main/certificate_masjid_screen.dart';
+export '../presentation/all/home/masjids/details/donation/main/donation.dart';
+export '../presentation/all/home/masjids/details/profile/details/profile/profile_screen.dart';
+export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_dkm_screen.dart';
+export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_teacher_screeen.dart';
+export '../presentation/all/home/masjids/details/profile/details/speech/main/speech_screen.dart';
+export '../presentation/all/home/masjids/main/masjids_detail_posting_screen.dart';
+export '../presentation/all/home/masjids/details/agenda/details/detail_agenda/detail_agenda_screen.dart';
 
+//? My Activity
 export '../presentation/all/home/my_activity/main/my_activity_screen.dart';
-export '../presentation/all/home/my_activity/detail_my_activity/more/main_more/more_screen.dart';
-export '../presentation/all/home/my_activity/detail_my_activity/more/detail_more/umum_profile/main_umum_profile/umum_profile_screen.dart';
-export '../presentation/all/home/my_activity/detail_my_activity/more/detail_more/other_faq/main/other_faq.dart';
-export '../presentation/all/home/my_activity/detail_my_activity/more/detail_more/other_suggestion_feedback/main/other_suggestion_feedback.dart';
+export '../presentation/all/home/my_activity/detail/more/main/more_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/general_profile/main/umum_profile_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/other_faq/main/other_faq_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/other_suggestion_feedback/main/other_suggestion_feedback_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/other_term/main/other_term_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/general_appearance/main/general_appreance_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/general_theme/main/general_theme_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/details/general_certificate/main/general_certificate_screen.dart';
+export '../presentation/all/home/donation/details/donation_history/main/donation_history_screen.dart';
+export '../presentation/all/home/my_activity/detail/lesson_history/main/lesson_history_screen.dart';
+export '../presentation/all/home/my_activity/detail/stats/main/stats_screen.dart';

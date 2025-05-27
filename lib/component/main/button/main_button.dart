@@ -21,25 +21,22 @@ class MainButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size.fromHeight(48),
-          backgroundColor: backgroundColor ?? colorScheme.primary,
-          foregroundColor: foregroundColor ?? colorScheme.onPrimary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size.fromHeight(48),
+        backgroundColor: backgroundColor ?? colorScheme.primary,
+        foregroundColor: foregroundColor ?? colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.white1, // ✅ pakai white1 dari AppColors
-          ),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: AppColors.white1, // ✅ pakai white1 dari AppColors
         ),
       ),
     );

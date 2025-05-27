@@ -1,36 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
-import 'package:masjidku/component/main/button_nav.dart';
+import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 
 class MyActivityScreen extends StatelessWidget {
   const MyActivityScreen({super.key});
 
-  /// Route Mapping
-  String _getRouteForIndex(int index) {
-    switch (index) {
-      case 0:
-        return '/';
-      case 1:
-        return '/time-pray';
-      case 2:
-        return '/posting';
-      case 3:
-        return '/donasi';
-      case 4:
-        return '/my-activity';
-      default:
-        return '/';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    context.read<NavigationCubit>().changeTab(4);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFDF7F9),
       appBar: AppBar(
         title: const Text("Aktivitas Saya"),
-        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black87,
@@ -42,7 +25,6 @@ class MyActivityScreen extends StatelessWidget {
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Container(
-                    color: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +32,7 @@ class MyActivityScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         _buildProfileSection(context),
                         const SizedBox(height: 12),
-                        _buildInfoSection(),
+                        _buildInfoSection(context),
                         const SizedBox(height: 24),
                         const Text(
                           "Kajian Saya",
@@ -87,13 +69,6 @@ class MyActivityScreen extends StatelessWidget {
               ),
             ),
       ),
-      bottomNavigationBar: BottomNavbar(
-        currentIndex: 4, // misal 4 untuk "Postingan" atau "Kajian"
-        onTap: (index) {
-          if (index == 4) return; // sudah di halaman ini
-          context.go(_getRouteForIndex(index)); // jika pakai go_router
-        },
-      ),
     );
   }
 
@@ -101,7 +76,6 @@ class MyActivityScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -160,11 +134,10 @@ class MyActivityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection() {
+  Widget _buildInfoSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -182,12 +155,14 @@ class MyActivityScreen extends StatelessWidget {
                 "Donasi",
                 "Riwayat donasi yang\ntelah diberikan",
                 const Color(0xFFD0F0DA),
+                () => GoRouter.of(context).push('/donation/donation-history'),
               ),
               const SizedBox(width: 12),
               _buildInfoCard(
                 "Kajian",
                 "Riwayat kajian yang\ntelah diikuti",
                 const Color(0xFFDFF3D7),
+                () => GoRouter.of(context).push('/my-activity/lesson-history'),
               ),
             ],
           ),
@@ -198,6 +173,7 @@ class MyActivityScreen extends StatelessWidget {
                 "Statistik",
                 "Data perkembangan\nbelajar",
                 const Color(0xFFFFE6C9),
+                () => GoRouter.of(context).push('/my-activity/stats'),
               ),
             ],
           ),
@@ -206,23 +182,31 @@ class MyActivityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(String title, String subtitle, Color color) {
+  Widget _buildInfoCard(
+    String title,
+    String subtitle,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Expanded(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text(subtitle, style: const TextStyle(fontSize: 13)),
-          ],
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
+              Text(subtitle, style: const TextStyle(fontSize: 13)),
+            ],
+          ),
         ),
       ),
     );
@@ -238,7 +222,6 @@ class MyActivityScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(12),
       ),

@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
-import 'package:masjidku/component/main/button_nav.dart';
+import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 
-class TimePrayScreen extends StatelessWidget {
+class TimePrayScreen extends StatefulWidget {
   const TimePrayScreen({super.key});
+
+  @override
+  State<TimePrayScreen> createState() => _TimePrayScreenState();
+}
+
+class _TimePrayScreenState extends State<TimePrayScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NavigationCubit>().changeTab(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +26,6 @@ class TimePrayScreen extends StatelessWidget {
       {"nama": "Magrib", "waktu": "18.05 WIB"},
       {"nama": "Isya", "waktu": "19.15 WIB"},
     ];
-
-    String _getRouteForIndex(int index) {
-      switch (index) {
-        case 0:
-          return '/';
-        case 1:
-          return '/kalender';
-        case 2:
-          return '/posting';
-        case 3:
-          return '/donasi';
-        case 4:
-          return '/kajian';
-        case 5:
-          return '/profil';
-        default:
-          return '/';
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(title: const Text("Waktu Sholat")),
@@ -105,20 +97,9 @@ class TimePrayScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            MainButton(
-              label: "Jadwal Sholat Lengkap",
-              // backgroundColor: Colors.deepPurple,
-              onPressed: () {},
-            ),
+            MainButton(label: "Jadwal Sholat Lengkap", onPressed: () {}),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavbar(
-        currentIndex: 1, // ← misal ini halaman "Kalender" / index ke-1
-        onTap: (index) {
-          if (index == 1) return; // sudah di halaman ini
-          context.go(_getRouteForIndex(index));
-        },
       ),
     );
   }

@@ -45,7 +45,6 @@ class _MasjidScreenState extends State<MasjidScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child:
             selectedTabIndex == 0
@@ -81,7 +80,10 @@ class _MasjidScreenState extends State<MasjidScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-        child: MainButton(label: "Donasi", onPressed: () {}),
+        child: MainButton(
+          label: "Donasi",
+          onPressed: () => GoRouter.of(context).push('/masjid/donation'),
+        ),
       ),
     );
   }
@@ -96,7 +98,7 @@ class _MasjidScreenState extends State<MasjidScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           alignment: Alignment.topLeft,
           child: GestureDetector(
-            onTap: () => context.go('/'),
+            onTap: () => context.go('/home'),
             child: const Icon(
               Icons.arrow_back_ios_new,
               size: 24,
@@ -105,7 +107,6 @@ class _MasjidScreenState extends State<MasjidScreen> {
           ),
         ),
         Container(
-          color: Colors.white,
           padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +120,6 @@ class _MasjidScreenState extends State<MasjidScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -309,11 +309,31 @@ class _MasjidScreenState extends State<MasjidScreen> {
           mainAxisSpacing: 16,
           childAspectRatio: 0.75,
           children: [
-            _menuItem(Icons.info, "Informasi", badge: 10),
-            _menuItem(Icons.receipt_long, "Laporan Keuangan"),
-            _menuItem(Icons.people, "Absensi & Belajar"),
-            _menuItem(Icons.calendar_month, "Agenda"),
-            _menuItem(Icons.workspace_premium, "Sertifikat"),
+            _menuItem(
+              Icons.info,
+              "Informasi",
+              onTap: () => context.go('/masjid/information'),
+            ),
+            _menuItem(
+              Icons.receipt_long,
+              "Laporan Keuangan",
+              onTap: () => context.go('/masjid/financial-report'),
+            ),
+            _menuItem(
+              Icons.people,
+              "Absensi & Belajar",
+              onTap: () => context.go('/masjid/absence-study'),
+            ),
+            _menuItem(
+              Icons.calendar_month,
+              "Agenda",
+              onTap: () => context.go('/masjid/agenda'),
+            ),
+            _menuItem(
+              Icons.workspace_premium,
+              "Sertifikat",
+              onTap: () => context.go("/masjid/certificate"),
+            ),
             _menuItem(
               Icons.person,
               "Profil",
@@ -329,18 +349,24 @@ class _MasjidScreenState extends State<MasjidScreen> {
               : posts.where((p) => p['image'] != null).toList();
 
       return SizedBox(
-        height:
-            MediaQuery.of(context).size.height * 0.7, // atau ukuran yang sesuai
+        height: MediaQuery.of(context).size.height * 0.7,
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           itemCount: filteredPosts.length,
           itemBuilder: (context, index) {
             final post = filteredPosts[index];
-            if (post['image'] != null) {
-              return PostImageItem(post: post);
-            } else {
-              return PostTextItem(post: post);
-            }
+
+            return GestureDetector(
+              onTap:
+                  () => GoRouter.of(
+                    context,
+                  ).push('/masjid/detail-posting', extra: post),
+
+              child:
+                  post['image'] != null
+                      ? PostImageItem(post: post)
+                      : PostTextItem(post: post),
+            );
           },
         ),
       );
@@ -380,11 +406,7 @@ class _MasjidScreenState extends State<MasjidScreen> {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

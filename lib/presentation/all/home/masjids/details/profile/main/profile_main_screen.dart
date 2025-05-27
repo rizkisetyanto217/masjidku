@@ -9,7 +9,6 @@ class ProfilMasjidPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: ListView(
         children: const [
           HeaderMasjid(),
@@ -25,7 +24,7 @@ class ProfilMasjidPage extends StatelessWidget {
           SizedBox(height: 100),
         ],
       ),
-      bottomNavigationBar: const DonasiBottomButton(),
+      bottomNavigationBar: const DonationBottomButton(),
     );
   }
 }
@@ -127,10 +126,20 @@ class SectionProfilLembaga extends StatelessWidget {
             style: TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.chevron_right),
-            label: const Text("Profil Lengkap"),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => context.go('/masjid/profile/full-profile'),
+              icon: const Icon(Icons.chevron_right),
+              label: const Text("Profil Lengkap"),
+              style: OutlinedButton.styleFrom(
+                alignment: Alignment.centerLeft, // ⬅️ label tetap di kiri
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -143,25 +152,48 @@ class SectionPengurusPengajar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final iconColor = theme.colorScheme.primary;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionTitle(icon: Icons.groups, title: "Pengurus & Pengajar"),
+          Row(
+            children: [
+              Icon(Icons.groups, color: iconColor),
+              const SizedBox(width: 8),
+              Text(
+                "Pengurus & Pengajar",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: iconColor,
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
           const Text(
             "Pengurus dan Pengajar berasal dari masyarakat setempat yang memiliki tujuan ingin memajukan Masjid",
+            style: TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: const [
-              Expanded(child: _InfoTile(label: "Pengurus", badgeCount: 6)),
-              SizedBox(width: 12),
-              Expanded(
-                child: _InfoTile(label: "Pengajar dan Imam", badgeCount: 11),
-              ),
-            ],
+          _InfoTile(
+            icon: Icons.description_outlined,
+            label: "Pengajar dan Imam",
+            subLabel: "Profil Asatizah",
+            badgeCount: 11,
+            onTap: () => GoRouter.of(context).push('/masjid/profile/teacher'),
+          ),
+          const SizedBox(height: 16),
+          _InfoTile(
+            icon: Icons.description_outlined,
+            label: "Pengurus",
+            subLabel: "Profil Pengurus DKM",
+            badgeCount: 6,
+            onTap: () => GoRouter.of(context).push('/masjid/profile/dkm'),
           ),
         ],
       ),
@@ -170,33 +202,76 @@ class SectionPengurusPengajar extends StatelessWidget {
 }
 
 class _InfoTile extends StatelessWidget {
+  final IconData icon;
   final String label;
+  final String subLabel;
   final int badgeCount;
+  final VoidCallback? onTap;
 
-  const _InfoTile({required this.label, required this.badgeCount});
+  const _InfoTile({
+    required this.icon,
+    required this.label,
+    required this.subLabel,
+    required this.badgeCount,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.description_outlined),
-          const SizedBox(width: 8),
-          Expanded(child: Text(label)),
-          CircleAvatar(
-            radius: 10,
-            backgroundColor: Colors.teal.shade700,
-            child: Text(
-              badgeCount.toString(),
-              style: const TextStyle(fontSize: 12, color: Colors.white),
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: theme.dividerColor),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 32, color: theme.colorScheme.primary),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        label,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 6),
+                      CircleAvatar(
+                        radius: 10,
+                        backgroundColor: theme.colorScheme.primary,
+                        child: Text(
+                          '$badgeCount',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subLabel,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const Icon(Icons.chevron_right),
+          ],
+        ),
       ),
     );
   }
@@ -240,7 +315,8 @@ class SectionSambutan extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           OutlinedButton.icon(
-            onPressed: () {},
+            onPressed:
+                () => GoRouter.of(context).push('/masjid/profile/speech'),
             icon: const Icon(Icons.chevron_right),
             label: const Text("Selengkapnya"),
           ),
@@ -308,15 +384,18 @@ class SectionTitle extends StatelessWidget {
   }
 }
 
-class DonasiBottomButton extends StatelessWidget {
-  const DonasiBottomButton({super.key});
+class DonationBottomButton extends StatelessWidget {
+  const DonationBottomButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(16),
-        child: MainButton(label: "Donasi", onPressed: () {}),
+        child: MainButton(
+          label: "Donasi",
+          onPressed: () => GoRouter.of(context).push('/masjid/donation'),
+        ),
       ),
     );
   }
