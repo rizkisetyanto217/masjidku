@@ -20,7 +20,6 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
           Icon(Icons.more_vert),
           SizedBox(width: 8),
         ],
-        backgroundColor: Colors.white,
       ),
     );
   }

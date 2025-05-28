@@ -87,7 +87,7 @@ class _DonationScreenState extends State<DonationScreen> {
             const Spacer(),
             CenteredOutlinedButton(
               label: "Lihat riwayat donasi saya",
-              onPressed: () => context.go('/donasi/donation-history'),
+              onPressed: () => context.go('/donation/donation-history'),
             ),
             const SizedBox(height: 12),
             MainButton(
@@ -99,7 +99,7 @@ class _DonationScreenState extends State<DonationScreen> {
                         final masjid = 10000 * selectedMasjid;
 
                         context.go(
-                          '/donasi/donation-confirmation',
+                          '/donation/donation-confirmation',
                           extra: DonationArguments(
                             kajianAmount: kajian,
                             masjidAmount: masjid,

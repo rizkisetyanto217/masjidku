@@ -30,7 +30,7 @@ class MainScaffold extends StatelessWidget {
                   context.go('/posting');
                   break;
                 case 3:
-                  context.go('/donasi');
+                  context.go('/donation');
                   break;
                 case 4:
                   context.go('/my-activity');

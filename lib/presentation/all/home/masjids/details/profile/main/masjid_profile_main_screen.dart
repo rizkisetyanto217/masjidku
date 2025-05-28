@@ -22,7 +22,7 @@ class ProfilMasjidPage extends StatelessWidget {
           GapBorderSeparator(),
           SizedBox(height: 16),
           SectionSambutan(),
-          SizedBox(height: 100),
+          SizedBox(height: 16),
         ],
       ),
       bottomNavigationBar: const DonationBottomButton(),

@@ -20,7 +20,6 @@ class _TermScreenState extends State<TermScreen> {
           Icon(Icons.more_vert),
           SizedBox(width: 8),
         ],
-        backgroundColor: Colors.white,
       ),
     );
   }

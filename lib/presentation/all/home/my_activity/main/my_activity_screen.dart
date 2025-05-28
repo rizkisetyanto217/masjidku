@@ -28,7 +28,7 @@ class MyActivityScreen extends StatelessWidget {
                       _buildProfileSection(context),
                       const SizedBox(height: 12),
                       _buildInfoSection(context),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 12),
                       Container(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -141,7 +141,7 @@ class MyActivityScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.05),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -212,24 +212,21 @@ class MyActivityScreen extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: isDark ? Colors.white10 : Colors.white,
+                      color: isDark ? Colors.white : Colors.white,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : Colors.black,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? Colors.white : Colors.black,
-                    ),
+                    style: TextStyle(fontSize: 13, color: Colors.black),
                   ),
                 ],
               ),

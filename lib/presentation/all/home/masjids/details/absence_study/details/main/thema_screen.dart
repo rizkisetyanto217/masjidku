@@ -169,7 +169,7 @@ class _NavigationMenuGrid extends StatelessWidget {
       {
         "icon": Icons.menu_book,
         "label": "Materi Lengkap",
-        "route": "/masjid/absence-study/thema-study/transcrip",
+        "route": "/masjid/absence-study/thema-study/transcription",
       },
       {
         "icon": Icons.notes_outlined,

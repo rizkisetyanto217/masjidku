@@ -53,7 +53,7 @@ final GoRouter router = GoRouter(
 
         // Donasi
         GoRoute(
-          path: '/donasi',
+          path: '/donation',
           builder: (_, __) => const DonationScreen(),
           routes: [
             GoRoute(
@@ -71,43 +71,42 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: '/my-activity',
           builder: (_, __) => const MyActivityScreen(),
-          routes: [
-            GoRoute(
-              path: 'more',
-              builder: (_, __) => const MoreScreen(),
-              routes: [
-                GoRoute(
-                  path: 'profile',
-                  builder: (_, __) => const UserProfileScreen(),
-                ),
-                GoRoute(path: 'faq', builder: (_, __) => const FAQScreen()),
-                GoRoute(
-                  path: 'suggestion-feedback',
-                  builder: (_, __) => const SuggestionFeedbackScreen(),
-                ),
-                GoRoute(path: 'term', builder: (_, __) => const TermScreen()),
-                GoRoute(path: 'theme', builder: (_, __) => const ThemeScreen()),
-                GoRoute(
-                  path: 'appearance',
-                  builder: (_, __) => const AppreanceScreen(),
-                ),
-                GoRoute(
-                  path: 'certificate',
-                  builder: (_, __) => const CertificateScreen(),
-                ),
-              ],
-            ),
-            GoRoute(
-              path: 'lesson-history',
-              builder: (_, __) => const LessonHistoryScreen(),
-            ),
-            GoRoute(path: 'stats', builder: (_, __) => const StatsScreen()),
-          ],
         ),
 
         // Waktu sholat
         GoRoute(path: '/time-pray', builder: (_, __) => const TimePrayScreen()),
       ],
+    ),
+
+    GoRoute(
+      path: '/my-activity/more',
+      builder: (_, __) => const MoreScreen(),
+      routes: [
+        GoRoute(path: 'profile', builder: (_, __) => const UserProfileScreen()),
+        GoRoute(path: 'faq', builder: (_, __) => const FAQScreen()),
+        GoRoute(
+          path: 'suggestion-feedback',
+          builder: (_, __) => const SuggestionFeedbackScreen(),
+        ),
+        GoRoute(path: 'term', builder: (_, __) => const TermScreen()),
+        GoRoute(path: 'theme', builder: (_, __) => const ThemeScreen()),
+        GoRoute(
+          path: 'appearance',
+          builder: (_, __) => const AppreanceScreen(),
+        ),
+        GoRoute(
+          path: 'certificate',
+          builder: (_, __) => const CertificateScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/my-activity/lesson-history',
+      builder: (_, __) => const LessonHistoryScreen(),
+    ),
+    GoRoute(
+      path: '/my-activity/stats',
+      builder: (_, __) => const StatsScreen(),
     ),
 
     // Search
@@ -152,8 +151,18 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: 'financial-report',
-          builder: (_, __) => const FinancialReportMasjidScreen(),
+          builder: (_, __) => const MasjidFinancialReportScreen(),
+          routes: [
+            GoRoute(
+              path: 'detail',
+              builder: (context, state) {
+                final data = state.extra as Map<String, dynamic>;
+                return MasjidFinancialReportDetailScreen(data: data);
+              },
+            ),
+          ],
         ),
+
         GoRoute(
           path: 'absence-study',
           builder: (_, __) => const AbsenceStudyMasjidScreen(),
@@ -172,7 +181,7 @@ final GoRouter router = GoRouter(
                   builder: (_, __) => const DetailThemaStudyInformationScreen(),
                 ),
                 GoRoute(
-                  path: 'transcrip',
+                  path: 'transcription',
                   builder:
                       (_, __) => const DetailThemaStudyTranscriptionScreen(),
                 ),
@@ -199,7 +208,40 @@ final GoRouter router = GoRouter(
                 ),
               ],
             ),
-            GoRoute(path: 'study', builder: (_, __) => const StudyScreen()),
+            GoRoute(
+              path: 'study',
+              builder: (_, __) => const StudyScreen(),
+              routes: [
+                GoRoute(
+                  path: 'information',
+                  builder: (_, __) => const StudyInformationScreen(),
+                ),
+                GoRoute(
+                  path: 'quiz',
+                  builder: (_, __) => const StudyQuizScreen(),
+                ),
+                GoRoute(
+                  path: 'transcription',
+                  builder: (_, __) => const StudyTranscriptionScreen(),
+                ),
+                GoRoute(
+                  path: 'summary',
+                  builder: (_, __) => const StudySummaryScreen(),
+                ),
+                GoRoute(
+                  path: 'video',
+                  builder: (_, __) => const StudyVideoScreen(),
+                ),
+                GoRoute(
+                  path: 'faq',
+                  builder: (_, __) => const StudyFaqScreen(),
+                ),
+                GoRoute(
+                  path: 'question-user',
+                  builder: (_, __) => const StudyQuestionUserScreen(),
+                ),
+              ],
+            ),
           ],
         ),
         GoRoute(

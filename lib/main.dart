@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/core/themes/app_theme.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
-import 'package:masjidku/routes/route.dart';
+import 'package:masjidku/routes/app_route.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

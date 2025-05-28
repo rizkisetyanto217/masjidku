@@ -159,7 +159,7 @@ class _CertificateCard extends StatelessWidget {
                 "📜 Nilai : $nilai",
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  // color: Colors.black87,
                 ),
               ),
             ],
@@ -169,11 +169,11 @@ class _CertificateCard extends StatelessWidget {
           const SizedBox(height: 6),
           Row(
             children: [
-              const Icon(Icons.circle, size: 8, color: Colors.black),
+              const Icon(Icons.circle, size: 8),
               const SizedBox(width: 6),
               Text(
                 "Lulus : $lulus",
-                style: const TextStyle(fontSize: 12, color: Colors.black87),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),

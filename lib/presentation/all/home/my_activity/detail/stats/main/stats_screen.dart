@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -13,13 +14,12 @@ class _StatsScreenState extends State<StatsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Statistik"),
-        leading: const BackButton(),
-        actions: const [
-          Icon(Icons.search),
-          SizedBox(width: 16),
-          Icon(Icons.more_vert),
-          SizedBox(width: 8),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/my-activity');
+          },
+        ),
       ),
     );
   }

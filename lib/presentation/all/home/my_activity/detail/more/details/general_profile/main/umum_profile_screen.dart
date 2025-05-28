@@ -40,13 +40,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFDFDFD),
+      // backgroundColor: const Color(0xFFFDFDFD),
       appBar: AppBar(
         title: const Text("Profil"),
         leading: const BackButton(),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0,
-        foregroundColor: Colors.black87,
+        // foregroundColor: Colors.black87,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -55,7 +55,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           children: [
             const Text(
               "Harap diisi profil pengguna untuk kemajuan aplikasi. Data pengguna insya Allah akan kami lindungi.",
-              style: TextStyle(color: Colors.black87),
+          
             ),
             const SizedBox(height: 16),
             _buildEditableField(
@@ -128,7 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       labelText: label,
       hintText: hint,
       filled: true,
-      fillColor: const Color(0xFFF8F8F8),
+      // fillColor: const Color(0xFFF8F8F8),
       suffixIcon:
           isDate
               ? const Icon(
@@ -160,7 +160,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         icon: const Icon(Icons.arrow_drop_down),
         decoration: decoration,
         dropdownColor: Colors.white,
-        style: const TextStyle(fontSize: 14, color: Colors.black87),
+        // style: const TextStyle(fontSize: 14, color: Colors.black87),
         items:
             dropdownItems
                 ?.map(

@@ -17,14 +17,14 @@ class _SuggestionFeedbackScreenState extends State<SuggestionFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isSaran = _selectedTab == 'Saran';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Saran dan Masukan"),
         leading: const BackButton(),
-        backgroundColor: Colors.white,
         elevation: 0,
-        foregroundColor: Colors.black87,
       ),
       body: Column(
         children: [
@@ -52,7 +52,7 @@ class _SuggestionFeedbackScreenState extends State<SuggestionFeedbackScreen> {
                     isSaran
                         ? "Pendapat yang berupa ide, rekomendasi atau langkah kedepan. Contohnya penambahan fitur atau materi tertentu."
                         : "Pendapat yang diberikan sebagai tanggapan berdasarkan pengalaman penggunaan. Contohnya kritik maupun penilaian.",
-                    style: const TextStyle(color: Colors.black87),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 12),
                   TextField(
@@ -61,16 +61,33 @@ class _SuggestionFeedbackScreenState extends State<SuggestionFeedbackScreen> {
                     decoration: InputDecoration(
                       hintText: "Tulis disini",
                       filled: true,
-                      fillColor: const Color(0xFFF8F8F8),
+                      fillColor:
+                          isDark ? Colors.grey[800] : const Color(0xFFF8F8F8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
+                        borderSide: BorderSide(
+                          color:
+                              isDark
+                                  ? Colors.grey.shade700
+                                  : const Color(0xFFDDDDDD),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
+                        borderSide: BorderSide(
+                          color:
+                              isDark
+                                  ? Colors.grey.shade700
+                                  : const Color(0xFFDDDDDD),
+                        ),
+                      ),
+                      hintStyle: TextStyle(
+                        color: isDark ? Colors.grey[400] : Colors.grey[700],
                       ),
                       contentPadding: const EdgeInsets.all(12),
+                    ),
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
                   const SizedBox(height: 20),

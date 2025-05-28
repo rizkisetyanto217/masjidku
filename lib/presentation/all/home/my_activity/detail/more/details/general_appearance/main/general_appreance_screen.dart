@@ -20,7 +20,7 @@ class _AppreanceScreenState extends State<AppreanceScreen> {
           Icon(Icons.more_vert),
           SizedBox(width: 8),
         ],
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
       ),
     );
   }

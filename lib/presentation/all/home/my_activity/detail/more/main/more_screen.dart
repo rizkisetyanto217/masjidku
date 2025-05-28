@@ -6,73 +6,86 @@ class MoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseBoxShadow = BoxDecoration(
+      color: Theme.of(context).cardColor,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        if (!isDark)
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+      ],
+    );
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text("Lainnya"), leading: const BackButton()),
+      appBar: AppBar(
+        title: const Text("Lainnya"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/my-activity');
+          },
+        ),
+      ),
       body: ListView(
         children: [
           const SizedBox(height: 8),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+
+          // Umum
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const _SectionTitle("Umum"),
-                _MenuTile(
-                  icon: Icons.person,
-                  label: "Profil",
-                  onTap: () => context.go('/my-activity/more/profile'),
-                ),
-                _MenuTile(
-                  icon: Icons.font_download,
-                  label: "Tampilan",
-                  onTap: () => context.go('/my-activity/more/appearance'),
-                ),
-                _MenuTile(
-                  icon: Icons.color_lens_outlined,
-                  label: "Tema",
-                  onTap: () => context.go('/my-activity/more/theme'),
-                ),
-                _MenuTile(
-                  icon: Icons.badge_outlined,
-                  label: "Sertifikat",
-                  onTap: () => context.go('/my-activity/more/certificate'),
+                Container(
+                  decoration: baseBoxShadow,
+                  child: Column(
+                    children: [
+                      _MenuTile(
+                        icon: Icons.person,
+                        label: "Profil",
+                        onTap: () => context.go('/my-activity/more/profile'),
+                      ),
+                      _MenuTile(
+                        icon: Icons.font_download,
+                        label: "Tampilan",
+                        onTap: () => context.go('/my-activity/more/appearance'),
+                      ),
+                      _MenuTile(
+                        icon: Icons.color_lens_outlined,
+                        label: "Tema",
+                        onTap: () => context.go('/my-activity/more/theme'),
+                      ),
+                      _MenuTile(
+                        icon: Icons.badge_outlined,
+                        label: "Sertifikat",
+                        onTap:
+                            () => context.go('/my-activity/more/certificate'),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
 
           const SizedBox(height: 16),
+
+          // Dukungan
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: _SectionTitle("Dukungan"),
+          ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: baseBoxShadow,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _SectionTitle("Dukungan"),
                 _MenuTile(
                   icon: Icons.favorite_outline,
                   label: "Dukung kami",
@@ -88,24 +101,18 @@ class MoreScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
+
+          // Lainnya
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: _SectionTitle("Lainnya"),
+          ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: baseBoxShadow,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _SectionTitle("Lainnya"),
                 _MenuTile(icon: Icons.language, label: "Website", onTap: () {}),
                 _MenuTile(
                   icon: Icons.question_answer_outlined,
@@ -128,21 +135,12 @@ class MoreScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          // const Divider(),
+
+          // Keluar
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: baseBoxShadow,
             child: _MenuTile(
               icon: Icons.logout,
               label: "Keluar",
@@ -165,7 +163,7 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Text(
         text,
         style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold),
@@ -189,16 +187,18 @@ class _MenuTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final color =
+        isDestructive ? Colors.red : (isDark ? Colors.white : Colors.black87);
+
     return ListTile(
-      leading: Icon(icon, color: isDestructive ? Colors.red : Colors.black87),
-      title: Text(
-        label,
-        style: TextStyle(color: isDestructive ? Colors.red : Colors.black87),
+      leading: Icon(icon, color: color),
+      title: Text(label, style: TextStyle(color: color)),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: isDark ? Colors.white54 : Colors.black38,
       ),
-      trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      tileColor: Colors.grey.shade100,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }

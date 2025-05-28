@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LessonHistoryScreen extends StatefulWidget {
   const LessonHistoryScreen({super.key});
@@ -13,13 +14,12 @@ class _LessonHistoryScreenState extends State<LessonHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Riwayat Pelajaran"),
-        leading: const BackButton(),
-        actions: const [
-          Icon(Icons.search),
-          SizedBox(width: 16),
-          Icon(Icons.more_vert),
-          SizedBox(width: 8),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/my-activity');
+          },
+        ),
       ),
     );
   }
