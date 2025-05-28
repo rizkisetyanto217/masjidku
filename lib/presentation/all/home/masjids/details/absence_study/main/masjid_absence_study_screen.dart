@@ -177,18 +177,18 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
     );
   }
 
-  IconData _tabIcon(int index) {
-    switch (index) {
-      case 0:
-        return Icons.arrow_outward_rounded;
-      case 1:
-        return Icons.bookmark_border;
-      case 2:
-        return Icons.calendar_today_outlined;
-      default:
-        return Icons.circle;
-    }
-  }
+  // IconData _tabIcon(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       return Icons.arrow_outward_rounded;
+  //     case 1:
+  //       return Icons.bookmark_border;
+  //     case 2:
+  //       return Icons.calendar_today_outlined;
+  //     default:
+  //       return Icons.circle;
+  //   }
+  // }
 }
 
 class _AbsenceCard extends StatelessWidget {
@@ -272,6 +272,7 @@ class _TabSelector extends StatelessWidget {
   const _TabSelector({required this.selectedIndex, required this.onChanged});
 
   @override
+
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> tabs = [
       {"label": "Terbaru", "icon": Icons.arrow_outward_rounded},

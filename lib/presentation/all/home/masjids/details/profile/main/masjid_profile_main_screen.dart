@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/accesoris/border/gap_border_separator.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/components/speech_card_component.dart';
 
 class ProfilMasjidPage extends StatelessWidget {
   const ProfilMasjidPage({super.key});
@@ -300,14 +301,14 @@ class SectionSambutan extends StatelessWidget {
             "Tulisan dari pengurus, pengajar dan jamaah Masjid At-Taqwa",
           ),
           const SizedBox(height: 12),
-          const _SambutanCard(
+          const SpeechCard(
             name: "Muhammad",
             role: "Pengajar",
             message:
                 "Semoga Allah ta’ala mudahkan kita dalam menuntut ilmu agama. Allah ta’ala berikan kemudahan bagi kita semua terutama bagi orang-orang yang sedang kesulitan agar dilancarkan usahanya..",
           ),
           const SizedBox(height: 8),
-          const _SambutanCard(
+          const SpeechCard(
             name: "Budi",
             role: "Ketua DKM",
             message:
@@ -320,39 +321,6 @@ class SectionSambutan extends StatelessWidget {
             icon: const Icon(Icons.chevron_right),
             label: const Text("Selengkapnya"),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SambutanCard extends StatelessWidget {
-  final String name;
-  final String role;
-  final String message;
-
-  const _SambutanCard({
-    required this.name,
-    required this.role,
-    required this.message,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
-          Text(role, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-          const SizedBox(height: 8),
-          Text(message, style: const TextStyle(fontSize: 13)),
         ],
       ),
     );

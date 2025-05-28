@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/core/themes/app_theme.dart';
-import 'package:masjidku/routes/route.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
+import 'package:masjidku/routes/route.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized(); // Tambahan penting
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MasjidkuApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MasjidkuApp extends StatelessWidget {
+  const MasjidkuApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()),
-        BlocProvider<NavigationCubit>(create: (_) => NavigationCubit()),
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => NavigationCubit()),
       ],
-      child: const MyAppWrapper(),
+      child: const _AppWithTheme(),
     );
   }
 }
 
-class MyAppWrapper extends StatelessWidget {
-  const MyAppWrapper({super.key});
+class _AppWithTheme extends StatelessWidget {
+  const _AppWithTheme({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +39,14 @@ class MyAppWrapper extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,
           routerConfig: router,
+          builder: (context, child) {
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: child, // 👈 ini wajib agar UI tetap muncul
+              ),
+            );
+          },
         );
       },
     );

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
 import 'package:masjidku/component/main/button/centered_outlined_button.dart';
-import 'package:masjidku/component/main/button/small_button.dart';
+import 'package:masjidku/component/main/button/small_button_full.dart';
 import 'package:masjidku/core/constants/app_spacing.dart';
 import 'package:masjidku/presentation/all/home/donation/main/component/donation_field_component.dart';
 import 'package:masjidku/presentation/all/home/donation/main/model/donation_arguments.dart';
@@ -66,7 +66,7 @@ class _DonationScreenState extends State<DonationScreen> {
               },
               formatter: formatter,
             ),
-            SmallButton(
+            SmallButtonFull(
               label: 'Masjid At Taqwa, Ciracas, Jakarta Timur',
               onPressed: () {
                 // Aksi ketika ditekan

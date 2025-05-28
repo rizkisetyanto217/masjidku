@@ -161,7 +161,45 @@ final GoRouter router = GoRouter(
             GoRoute(
               path: 'thema-study',
               builder: (_, __) => const ThemaStudyScreen(),
+              routes: [
+                GoRoute(path: 'quiz', builder: (_, __) => const QuizScreen()),
+                GoRoute(
+                  path: 'faq',
+                  builder: (_, __) => const DetailThemaStudyFaqScreen(),
+                ),
+                GoRoute(
+                  path: 'information',
+                  builder: (_, __) => const DetailThemaStudyInformationScreen(),
+                ),
+                GoRoute(
+                  path: 'transcrip',
+                  builder:
+                      (_, __) => const DetailThemaStudyTranscriptionScreen(),
+                ),
+                GoRoute(
+                  path: 'stats',
+                  builder: (_, __) => const DetailThemaStudyStatsUserScreen(),
+                ),
+                GoRoute(
+                  path: 'note',
+                  builder: (_, __) => const DetailThemaStudyNoteUserScreen(),
+                ),
+                GoRoute(
+                  path: 'suggestion',
+                  builder:
+                      (_, __) => const DetailThemaStudySuggestionUserScreen(),
+                ),
+                GoRoute(
+                  path: 'summary',
+                  builder: (_, __) => const DetailThemaStudySummaryScreen(),
+                ),
+                GoRoute(
+                  path: 'video',
+                  builder: (_, __) => const ThemaVideoScreen(),
+                ),
+              ],
             ),
+            GoRoute(path: 'study', builder: (_, __) => const StudyScreen()),
           ],
         ),
         GoRoute(

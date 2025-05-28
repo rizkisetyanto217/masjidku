@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
+import 'package:masjidku/component/main/home/tab_switch_component.dart';
 
 class SuggestionFeedbackScreen extends StatefulWidget {
   const SuggestionFeedbackScreen({super.key});
@@ -30,7 +31,15 @@ class _SuggestionFeedbackScreenState extends State<SuggestionFeedbackScreen> {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildTabSwitcher(),
+            child: TabSwitch(
+              tabs: const ['Saran', 'Masukan'],
+              selectedTab: _selectedTab,
+              onChanged: (label) {
+                setState(() {
+                  _selectedTab = label;
+                });
+              },
+            ),
           ),
           const SizedBox(height: 12),
           Expanded(
@@ -102,41 +111,6 @@ class _SuggestionFeedbackScreenState extends State<SuggestionFeedbackScreen> {
               const SnackBar(content: Text("Terima kasih atas masukannya!")),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTabSwitcher() {
-    return Container(
-      height: 44,
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE0E0E0),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(children: [_buildTab("Saran"), _buildTab("Masukan")]),
-    );
-  }
-
-  Widget _buildTab(String label) {
-    final isActive = _selectedTab == label;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedTab = label),
-        child: Container(
-          decoration: BoxDecoration(
-            color: isActive ? const Color(0xFF006B64) : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Colors.white : Colors.black87,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
         ),
       ),
     );

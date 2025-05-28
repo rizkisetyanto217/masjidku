@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/component/main/posting/post_image_item.dart';
 import 'package:masjidku/component/main/posting/post_text_item.dart';
+import 'package:masjidku/component/main/home/tab_switch_component.dart';
 
 class PostinganScreen extends StatefulWidget {
   const PostinganScreen({super.key});
@@ -13,7 +14,7 @@ class PostinganScreen extends StatefulWidget {
 }
 
 class _PostinganScreenState extends State<PostinganScreen> {
-  int selectedTab = 0;
+  String selectedTab = "Semua";
   final List<String> tabs = ["Semua", "Kajian"];
 
   final List<Map<String, dynamic>> posts = [
@@ -50,7 +51,7 @@ class _PostinganScreenState extends State<PostinganScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredPosts =
-        selectedTab == 0
+        selectedTab == "Semua"
             ? posts
             : posts.where((p) => p['image'] != null).toList();
 
@@ -58,45 +59,16 @@ class _PostinganScreenState extends State<PostinganScreen> {
       appBar: AppBar(title: const Text("Postingan")),
       body: Column(
         children: [
+          const SizedBox(height: 12),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children:
-                  List.generate(tabs.length, (index) {
-                        final isSelected = selectedTab == index;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => selectedTab = index),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color:
-                                    isSelected
-                                        ? const Color(0xFF006B64)
-                                        : Colors.transparent,
-                                border: Border.all(
-                                  color: const Color(0xFF006B64),
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                tabs[index],
-                                style: TextStyle(
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      })
-                      .expand((widget) => [widget, const SizedBox(width: 8)])
-                      .toList()
-                    ..removeLast(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TabSwitch(
+              tabs: tabs,
+              selectedTab: selectedTab,
+              onChanged: (label) => setState(() => selectedTab = label),
             ),
           ),
+          const SizedBox(height: 12),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -105,10 +77,13 @@ class _PostinganScreenState extends State<PostinganScreen> {
                 final post = filteredPosts[index];
                 return GestureDetector(
                   onTap: () => context.go('/posting/detail', extra: post),
-                  child:
-                      post['image'] != null
-                          ? PostImageItem(post: post)
-                          : PostTextItem(post: post),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child:
+                        post['image'] != null
+                            ? PostImageItem(post: post)
+                            : PostTextItem(post: post),
+                  ),
                 );
               },
             ),

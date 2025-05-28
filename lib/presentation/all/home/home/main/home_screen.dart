@@ -5,6 +5,9 @@ import 'package:masjidku/component/main/home/header.dart';
 import 'package:masjidku/component/main/home/player_info_card.dart';
 import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
+import 'package:flutter/services.dart';
+import 'package:masjidku/core/constants/app_color.dart';
+import 'package:masjidku/core/themes/app_theme.dart';
 
 class MasjidkuDashboard extends StatefulWidget {
   const MasjidkuDashboard({Key? key}) : super(key: key);
@@ -139,6 +142,12 @@ class _MasjidkuDashboardState extends State<MasjidkuDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildDashboardContent();
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: AppColors.primary, // Sesuaikan dengan header kamu
+        statusBarIconBrightness: Brightness.light, // Biar ikon putih
+      ),
+      child: Scaffold(body: _buildDashboardContent()),
+    );
   }
 }

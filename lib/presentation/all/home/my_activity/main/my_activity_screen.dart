@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
+import 'package:masjidku/component/main/button/small_button.dart';
+import 'package:masjidku/core/constants/app_color.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 
 class MyActivityScreen extends StatelessWidget {
@@ -12,58 +14,64 @@ class MyActivityScreen extends StatelessWidget {
     context.read<NavigationCubit>().changeTab(4);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Aktivitas Saya"),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black87,
-      ),
+      appBar: AppBar(title: const Text("Aktivitas Saya"), elevation: 0),
       body: LayoutBuilder(
         builder:
             (context, constraints) => SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        _buildProfileSection(context),
-                        const SizedBox(height: 12),
-                        _buildInfoSection(context),
-                        const SizedBox(height: 24),
-                        const Text(
-                          "Kajian Saya",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF006B64),
-                          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // const SizedBox(height: 16),
+                      _buildProfileSection(context),
+                      const SizedBox(height: 12),
+                      _buildInfoSection(context),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Kajian Saya",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF006B64),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            _buildKajianCard(
+                              title: "Rencana Allah yang terbaik",
+                              ustadz: "Ustadz Abdullah",
+                              lokasi: "Masjid Al Hidayah, Senen, Jakarta Pusat",
+                              waktu: "4 Maret 2025, Pukul 10.00 WIB – Selesai",
+                              tags: ["Hadir Online", "Materi & Soal Tersedia"],
+                            ),
+                            const SizedBox(height: 12),
+                            _buildKajianCard(
+                              title: "Rencana Allah yang terbaik",
+                              ustadz: "Ustadz Abdullah",
+                              lokasi: "Masjid Al Hidayah, Senen, Jakarta Pusat",
+                              waktu: "4 Maret 2025, Pukul 10.00 WIB – Selesai",
+                              tags: ["Hadir Langsung"],
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        _buildKajianCard(
-                          title: "Rencana Allah yang terbaik",
-                          ustadz: "Ustadz Abdullah",
-                          lokasi: "Masjid Al Hidayah, Senen, Jakarta Pusat",
-                          waktu: "4 Maret 2025, Pukul 10.00 WIB – Selesai",
-                          tags: ["Hadir Online", "Materi & Soal Tersedia"],
+                      ),
+                      const Spacer(),
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: MainButton(
+                          label: "Selengkapnya",
+                          onPressed: () {},
                         ),
-                        const SizedBox(height: 12),
-                        _buildKajianCard(
-                          title: "Rencana Allah yang terbaik",
-                          ustadz: "Ustadz Abdullah",
-                          lokasi: "Masjid Al Hidayah, Senen, Jakarta Pusat",
-                          waktu: "4 Maret 2025, Pukul 10.00 WIB – Selesai",
-                          tags: ["Hadir Langsung"],
-                        ),
-                        const Spacer(),
-                        const SizedBox(height: 24),
-                        MainButton(label: "Selengkapnya", onPressed: () {}),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                      ),
+                      // const SizedBox(height: 16),
+                    ],
                   ),
                 ),
               ),
@@ -74,8 +82,11 @@ class MyActivityScreen extends StatelessWidget {
 
   Widget _buildProfileSection(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 24).copyWith(),
+
       decoration: BoxDecoration(
+        color: AppColors.primary,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -84,48 +95,37 @@ class MyActivityScreen extends StatelessWidget {
           ),
         ],
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             "Budi Renaldi",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white1,
+            ),
           ),
           const Text(
             "Bergabung pada 3 November 2025",
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: AppColors.tertiary),
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-              ElevatedButton(
+              SmallButton(
+                text: "12 Masjid Saya",
                 onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2196F3),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                ),
-                child: const Text("12 Masjid Saya"),
+                backgroundColor: Colors.white,
+                textColor: AppColors.primary,
               ),
               const SizedBox(width: 8),
-              ElevatedButton(
+              SmallButton(
+                text: "Profil Saya",
                 onPressed: () => context.go('/my-activity/more'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF64B5F6),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                ),
-                child: const Text("Profil Saya"),
+                backgroundColor: AppColors.secondary,
+                textColor: Colors.white,
               ),
             ],
           ),
@@ -189,25 +189,53 @@ class MyActivityScreen extends StatelessWidget {
     VoidCallback onTap,
   ) {
     return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text(subtitle, style: const TextStyle(fontSize: 13)),
-            ],
-          ),
-        ),
+      child: Builder(
+        builder: (context) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+
+          return GestureDetector(
+            onTap: onTap,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: color),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.white10 : Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -220,6 +248,7 @@ class MyActivityScreen extends StatelessWidget {
     required List<String> tags,
   }) {
     return Container(
+      width: double.infinity, // <-- Tambahkan ini agar lebar full
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
