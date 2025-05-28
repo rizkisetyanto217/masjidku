@@ -11,14 +11,14 @@ import 'package:masjidku/presentation/all/home/donation/main/component/donation_
 import 'package:masjidku/presentation/all/home/donation/main/model/donation_arguments.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 
-class DonationScreen extends StatefulWidget {
-  const DonationScreen({super.key});
+class MasjidDonationScreen extends StatefulWidget {
+  const MasjidDonationScreen({super.key});
 
   @override
-  State<DonationScreen> createState() => _DonationScreenState();
+  State<MasjidDonationScreen> createState() => _MasjidDonationScreenState();
 }
 
-class _DonationScreenState extends State<DonationScreen> {
+class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
   final TextEditingController donasiKajianController = TextEditingController();
   final TextEditingController dukungMasjidController = TextEditingController();
 

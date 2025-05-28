@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
-class CertificateMasjidScreen extends StatefulWidget {
-  const CertificateMasjidScreen({super.key});
+class FinancialReportMasjidScreen extends StatefulWidget {
+  const FinancialReportMasjidScreen({super.key});
 
   @override
-  State<CertificateMasjidScreen> createState() =>
-      _CertificateMasjidScreenState();
+  State<FinancialReportMasjidScreen> createState() =>
+      _FinancialReportMasjidScreenState();
 }
 
-class _CertificateMasjidScreenState extends State<CertificateMasjidScreen> {
+class _FinancialReportMasjidScreenState
+    extends State<FinancialReportMasjidScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sertifikat"),
+        title: const Text("Laporan Keuangan"),
         leading: const BackButton(),
         actions: const [
           Icon(Icons.search),

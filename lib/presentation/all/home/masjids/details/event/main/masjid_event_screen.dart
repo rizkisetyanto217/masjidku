@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class MasjidDonationScreen extends StatefulWidget {
-  const MasjidDonationScreen({super.key});
+class MasjidEventScreen extends StatefulWidget {
+  const MasjidEventScreen({super.key});
 
   @override
-  State<MasjidDonationScreen> createState() => _MasjidDonationScreenState();
+  State<MasjidEventScreen> createState() => _MasjidEventScreenState();
 }
 
-class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
+class _MasjidEventScreenState extends State<MasjidEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Donasi Masjid"),
+        title: const Text("Masjid Acara"),
         leading: const BackButton(),
         actions: const [
           Icon(Icons.search),

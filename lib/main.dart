@@ -6,15 +6,23 @@ import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 
 void main() {
-  runApp(
-    MultiBlocProvider(
+  WidgetsFlutterBinding.ensureInitialized(); // Tambahan penting
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => NavigationCubit()), // ✅ Tambahkan ini
+        BlocProvider<ThemeCubit>(create: (_) => ThemeCubit()),
+        BlocProvider<NavigationCubit>(create: (_) => NavigationCubit()),
       ],
       child: const MyAppWrapper(),
-    ),
-  );
+    );
+  }
 }
 
 class MyAppWrapper extends StatelessWidget {
@@ -25,7 +33,7 @@ class MyAppWrapper extends StatelessWidget {
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, themeMode) {
         return MaterialApp.router(
-          title: 'Aplikasi Saya',
+          title: 'Masjidku',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'main_scaffold.dart';
 import 'pages_router.dart';
@@ -5,182 +6,190 @@ import 'pages_router.dart';
 final GoRouter router = GoRouter(
   initialLocation: '/home',
   routes: [
+    // Root shell (dengan bottom navigation wrapper)
     ShellRoute(
       builder: (context, state, child) => MainScaffold(child: child),
       routes: [
+        // Home group
         GoRoute(
           path: '/home',
           builder: (context, state) => const MasjidkuDashboard(),
           routes: [
             GoRoute(
               path: 'information',
-              builder: (context, state) => const InformaationScreen(),
+              builder: (_, __) => const InformaationScreen(),
             ),
             GoRoute(
               path: 'collaboration',
-              builder: (context, state) => const CollaborationHomeScreen(),
+              builder: (_, __) => const CollaborationHomeScreen(),
             ),
             GoRoute(
               path: 'explore',
-              builder: (context, state) => const ExploreHomeScreen(),
+              builder: (_, __) => const ExploreHomeScreen(),
             ),
-            GoRoute(
-              path: 'plan',
-              builder: (context, state) => const PlanHomeScreen(),
-            ),
+            GoRoute(path: 'plan', builder: (_, __) => const PlanHomeScreen()),
           ],
         ),
+
+        // Postingan
         GoRoute(
           path: '/posting',
-          builder: (context, state) => const PostinganScreen(),
+          builder: (_, __) => const PostinganScreen(),
           routes: [
             GoRoute(
               path: 'detail',
               builder: (context, state) {
-                final post = state.extra as Map<String, dynamic>;
+                final post = state.extra;
+                if (post is! Map<String, dynamic>) {
+                  return const Scaffold(
+                    body: Center(child: Text('Invalid post data')),
+                  );
+                }
                 return DetailPostingScreen(post: post);
               },
             ),
           ],
         ),
+
+        // Donasi
         GoRoute(
           path: '/donasi',
-          builder: (context, state) => const DonationScreen(),
+          builder: (_, __) => const DonationScreen(),
           routes: [
             GoRoute(
               path: 'donation-confirmation',
-              builder: (context, state) => const DetailDonationConfirm(),
+              builder: (_, __) => const DetailDonationConfirm(),
             ),
             GoRoute(
               path: 'donation-history',
-              builder: (context, state) => const DonationHistoryScreen(),
+              builder: (_, __) => const DonationHistoryScreen(),
             ),
           ],
         ),
+
+        // Aktivitas pengguna
         GoRoute(
           path: '/my-activity',
-          builder: (context, state) => const MyActivityScreen(),
+          builder: (_, __) => const MyActivityScreen(),
           routes: [
             GoRoute(
               path: 'more',
-              builder: (context, state) => const MoreScreen(),
+              builder: (_, __) => const MoreScreen(),
               routes: [
                 GoRoute(
                   path: 'profile',
-                  builder: (context, state) => const UserProfileScreen(),
+                  builder: (_, __) => const UserProfileScreen(),
                 ),
-                GoRoute(
-                  path: 'faq',
-                  builder: (context, state) => const FAQScreen(),
-                ),
+                GoRoute(path: 'faq', builder: (_, __) => const FAQScreen()),
                 GoRoute(
                   path: 'suggestion-feedback',
-                  builder: (context, state) => const SuggestionFeedbackScreen(),
+                  builder: (_, __) => const SuggestionFeedbackScreen(),
                 ),
-                GoRoute(
-                  path: 'term',
-                  builder: (context, state) => const TermScreen(),
-                ),
-                GoRoute(
-                  path: 'theme',
-                  builder: (context, state) => const ThemeScreen(),
-                ),
+                GoRoute(path: 'term', builder: (_, __) => const TermScreen()),
+                GoRoute(path: 'theme', builder: (_, __) => const ThemeScreen()),
                 GoRoute(
                   path: 'appearance',
-                  builder: (context, state) => const AppreanceScreen(),
+                  builder: (_, __) => const AppreanceScreen(),
                 ),
                 GoRoute(
                   path: 'certificate',
-                  builder: (context, state) => const CertificateScreen(),
+                  builder: (_, __) => const CertificateScreen(),
                 ),
               ],
             ),
             GoRoute(
               path: 'lesson-history',
-              builder: (context, state) => const LessonHistoryScreen(),
+              builder: (_, __) => const LessonHistoryScreen(),
             ),
-            GoRoute(
-              path: 'stats',
-              builder: (context, state) => const StatsScreen(),
-            ),
+            GoRoute(path: 'stats', builder: (_, __) => const StatsScreen()),
           ],
         ),
-        GoRoute(
-          path: '/time-pray',
-          builder: (context, state) => const TimePrayScreen(),
-        ),
+
+        // Waktu sholat
+        GoRoute(path: '/time-pray', builder: (_, __) => const TimePrayScreen()),
       ],
     ),
 
-    GoRoute(
-      path: '/search',
-      builder: (context, state) => const SearchMasjidScreen(),
-    ),
+    // Search
+    GoRoute(path: '/search', builder: (_, __) => const SearchMasjidScreen()),
+
+    // Masjid
     GoRoute(
       path: '/masjid',
-      builder: (context, state) => const MasjidScreen(),
+      builder: (_, __) => const MasjidScreen(),
       routes: [
         GoRoute(
           path: 'profile',
-          builder: (context, state) => const ProfilMasjidPage(),
+          builder: (_, __) => const ProfilMasjidPage(),
           routes: [
             GoRoute(
               path: 'full-profile',
-              builder: (context, state) => const MasjidProfilScreen(),
+              builder: (_, __) => const MasjidProfilScreen(),
             ),
             GoRoute(
               path: 'teacher',
-              builder: (context, state) => const MasjidTeacherScreeen(),
+              builder: (_, __) => const MasjidTeacherScreeen(),
             ),
-            GoRoute(
-              path: 'dkm',
-              builder: (context, state) => const MasjidDKMScreen(),
-            ),
-            GoRoute(
-              path: 'speech',
-              builder: (context, state) => const SpeechScreen(),
-            ),
+            GoRoute(path: 'dkm', builder: (_, __) => const MasjidDKMScreen()),
+            GoRoute(path: 'speech', builder: (_, __) => const SpeechScreen()),
           ],
         ),
         GoRoute(
           path: 'detail-posting',
           builder: (context, state) {
-            final post = state.extra as Map<String, dynamic>;
+            final post = state.extra;
+            if (post is! Map<String, dynamic>) {
+              return const Scaffold(
+                body: Center(child: Text('Invalid post data')),
+              );
+            }
             return MasjidsDetailPostingScreen(post: post);
           },
         ),
         GoRoute(
           path: 'information',
-          builder: (context, state) => const InformationMasjidScreeen(),
+          builder: (_, __) => const InformationMasjidScreeen(),
         ),
         GoRoute(
           path: 'financial-report',
-          builder: (context, state) => const FinancialReportMasjidScreen(),
+          builder: (_, __) => const FinancialReportMasjidScreen(),
         ),
         GoRoute(
           path: 'absence-study',
-          builder: (context, state) => const AbsenceStudyMasjidScreen(),
+          builder: (_, __) => const AbsenceStudyMasjidScreen(),
+          routes: [
+            GoRoute(
+              path: 'thema-study',
+              builder: (_, __) => const ThemaStudyScreen(),
+            ),
+          ],
         ),
         GoRoute(
           path: 'agenda',
-          builder: (context, state) => const AgendaMasjidScreen(),
+          builder: (_, __) => const AgendaMasjidScreen(),
           routes: [
             GoRoute(
               path: 'detail',
               builder: (context, state) {
-                final data = state.extra as Map<String, String>;
+                final data = state.extra;
+                if (data is! Map<String, String>) {
+                  return const Scaffold(
+                    body: Center(child: Text('Invalid agenda data')),
+                  );
+                }
                 return DetailAgendaScreen(data: data);
               },
             ),
           ],
         ),
+        GoRoute(path: 'event', builder: (_, _) => const MasjidEventScreen()),
         GoRoute(
           path: 'certificate',
-          builder: (context, state) => const CertificateMasjidScreen(),
+          builder: (_, __) => const CertificateMasjidScreen(),
         ),
         GoRoute(
           path: 'donation',
-          builder: (context, state) => const MasjidDonationScreen(),
+          builder: (_, __) => const MasjidDonationScreen(),
         ),
       ],
     ),

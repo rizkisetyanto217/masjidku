@@ -19,19 +19,21 @@ export '../presentation/all/home/pray/main/time_pray_screen.dart';
 
 //? Masjid
 export '../presentation/all/home/masjids/main/masjids_main_screen.dart';
-export '../presentation/all/home/masjids/details/profile/main/profile_main_screen.dart';
-export '../presentation/all/home/masjids/details/information/main/information_masjid_screen.dart';
-export '../presentation/all/home/masjids/details/financial_report/main/financial_report_masjid_screen.dart';
-export '../presentation/all/home/masjids/details/absence_study/main/absence_study_masjid_screen.dart';
-export '../presentation/all/home/masjids/details/agenda/main/agenda_masjid_screen.dart';
-export '../presentation/all/home/masjids/details/certificate/main/certificate_masjid_screen.dart';
-export '../presentation/all/home/masjids/details/donation/main/donation.dart';
+export '../presentation/all/home/masjids/details/profile/main/masjid_profile_main_screen.dart';
+export '../presentation/all/home/masjids/details/information/main/masjid_information_screen.dart';
+export '../presentation/all/home/masjids/details/financial_report/main/masjid_financial_report_screen.dart';
+export '../presentation/all/home/masjids/details/absence_study/main/masjid_absence_study_screen.dart';
+export '../presentation/all/home/masjids/details/agenda/main/masjid_agenda_screen.dart';
+export '../presentation/all/home/masjids/details/certificate/main/masjid_certificate_screen.dart';
+export '../presentation/all/home/masjids/details/donation/main/masjid_donation_screen.dart';
 export '../presentation/all/home/masjids/details/profile/details/profile/profile_screen.dart';
 export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_dkm_screen.dart';
 export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_teacher_screeen.dart';
 export '../presentation/all/home/masjids/details/profile/details/speech/main/speech_screen.dart';
 export '../presentation/all/home/masjids/main/masjids_detail_posting_screen.dart';
 export '../presentation/all/home/masjids/details/agenda/details/detail_agenda/detail_agenda_screen.dart';
+export '../presentation/all/home/masjids/details/absence_study/details/thema/thema_screen.dart';
+export '../presentation/all/home/masjids/details/event/main/masjid_event_screen.dart';
 
 //? My Activity
 export '../presentation/all/home/my_activity/main/my_activity_screen.dart';

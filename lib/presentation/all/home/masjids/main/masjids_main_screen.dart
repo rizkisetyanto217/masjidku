@@ -326,8 +326,13 @@ class _MasjidScreenState extends State<MasjidScreen> {
             ),
             _menuItem(
               Icons.calendar_month,
-              "Agenda",
+              "Jadwal Kajian",
               onTap: () => context.go('/masjid/agenda'),
+            ),
+            _menuItem(
+              Icons.event_note_sharp,
+              "Acara",
+              onTap: () => context.go('/masjid/event'),
             ),
             _menuItem(
               Icons.workspace_premium,
