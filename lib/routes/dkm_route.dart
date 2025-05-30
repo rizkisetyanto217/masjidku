@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:masjidku/presentation/dkm/home/absence_study/details/study/details/faq/main/dkm_study_faq_screen.dart';
 import 'package:masjidku/presentation/dkm/home/main/dkm_main_screen.dart';
 import 'pages_router.dart';
 
@@ -90,11 +91,52 @@ final List<GoRoute> _nestedDkmRoutes = [
   GoRoute(path: 'stats', builder: (_, __) => const DkmStatsScreen()),
   GoRoute(
     path: 'study',
-    builder: (_, __) => const DkmStudyScreen(),
+    builder: (_, __) => const DkmAbsenceStudyScreen(),
     routes: [
       GoRoute(path: 'add-study', builder: (_, __) => const DkmAddStudyScreen()),
-      GoRoute(path: 'add-file-study', builder: (_, __) => const DkmAddFileStudyScreen()),
-      GoRoute(path: 'add-study-confirm', builder: (_, __) => const DkmConfirmAddStudy()),
+      GoRoute(
+        path: 'add-file-study',
+        builder: (_, __) => const DkmAddFileStudyScreen(),
+      ),
+      GoRoute(
+        path: 'add-study-confirm',
+        builder: (_, __) => const DkmConfirmAddStudy(),
+      ),
+      GoRoute(path: 'thema', builder: (_, __) => const DkmThemaScreen()),
+      GoRoute(
+        path: 'study',
+        builder: (_, __) => const DkmStudyScreen(),
+        routes: [
+          GoRoute(path: 'faq', builder: (_, __) => const DkmStudyFaqScreen()),
+          GoRoute(
+            path: 'information',
+            builder: (_, __) => const DkmStudyInformationScreen(),
+          ),
+          GoRoute(
+            path: 'transcription',
+            builder: (_, __) => const DkmStudyTransciptionScreen(),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, __) => const DkmStudyEditTransciptionScreen(),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'summary',
+            builder: (_, __) => const DkmStudySummaryScreen(),
+          ),
+          GoRoute(
+            path: 'video',
+            builder: (_, __) => const DkmStudyVideoScreen(),
+          ),
+          GoRoute(path: 'quiz', builder: (_, __) => const DkmStudyQuizScreen()),
+          GoRoute(
+            path: 'stats',
+            builder: (_, __) => const DkmStudyStatsScreen(),
+          ),
+        ],
+      ),
     ],
   ),
 ];

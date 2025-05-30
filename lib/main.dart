@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/core/themes/app_theme.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
+import 'package:masjidku/presentation/all/home/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/routes/app_route.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,6 +22,7 @@ class MasjidkuApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(create: (_) => NavigationCubit()),
+        BlocProvider(create: (_) => SelectedMasjidCubit()),
       ],
       child: const _AppWithTheme(),
     );

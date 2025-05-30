@@ -7,7 +7,6 @@ import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
 import 'package:flutter/services.dart';
 import 'package:masjidku/core/constants/app_color.dart';
-import 'package:masjidku/core/themes/app_theme.dart';
 
 class MasjidkuMain extends StatefulWidget {
   const MasjidkuMain({Key? key}) : super(key: key);

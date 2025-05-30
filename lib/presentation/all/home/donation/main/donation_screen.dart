@@ -7,6 +7,7 @@ import 'package:masjidku/component/main/button/main_button.dart';
 import 'package:masjidku/component/main/button/centered_outlined_button.dart';
 import 'package:masjidku/component/main/button/small_button_full.dart';
 import 'package:masjidku/core/constants/app_spacing.dart';
+import 'package:masjidku/presentation/all/home/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
 import 'package:masjidku/presentation/all/home/donation/main/component/donation_field_component.dart';
 import 'package:masjidku/presentation/all/home/donation/main/model/donation_arguments.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
@@ -44,10 +45,17 @@ class _DonationScreenState extends State<DonationScreen> {
     super.dispose();
   }
 
-  bool get isButtonEnabled => selectedKajian > 0 || selectedMasjid > 0;
+  bool get isButtonEnabled {
+    final selectedMasjidData = context.read<SelectedMasjidCubit>().state;
+    final dukungFilled = selectedMasjid > 0;
+    final kajianFilled = selectedKajian > 0 && selectedMasjidData != null;
+    return dukungFilled || kajianFilled;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final selectedMasjidData = context.watch<SelectedMasjidCubit>().state;
+
     return Scaffold(
       appBar: AppBar(title: const Text("Donasi Saya")),
       body: Padding(
@@ -67,9 +75,18 @@ class _DonationScreenState extends State<DonationScreen> {
               formatter: formatter,
             ),
             SmallButtonFull(
-              label: 'Masjid At Taqwa, Ciracas, Jakarta Timur',
+              label:
+                  selectedMasjidData != null
+                      ? selectedMasjidData['name'] ?? 'Masjid Terpilih'
+                      : 'Pilih Masjid',
+              color:
+                  selectedMasjidData != null
+                      ? const Color(0xFFE0F2F1)
+                      : const Color(0xFFBDBDBD),
+              textColor: Colors.black,
+              trailingIcon: Icons.arrow_forward_ios_rounded,
               onPressed: () {
-                // Aksi ketika ditekan
+                context.go('/donation/search-masjid-donation');
               },
             ),
             AppSpacing.lg,

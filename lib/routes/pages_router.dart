@@ -17,6 +17,10 @@ export '../presentation/all/home/donation/details/donation_confirmation/detail_d
 
 export '../presentation/all/home/pray/main/time_pray_screen.dart';
 
+//? Donation
+export '../presentation/all/home/masjids/details/donation/main/masjid_donation_screen.dart';
+export '../presentation/all/home/donation/details/search_masjid/donation_search_masjid_screen.dart';
+
 //? Masjid
 export '../presentation/all/home/masjids/main/masjids_main_screen.dart';
 export '../presentation/all/home/masjids/details/profile/main/masjid_profile_main_screen.dart';
@@ -26,7 +30,7 @@ export '../presentation/all/home/masjids/details/financial_report/details/masjid
 export '../presentation/all/home/masjids/details/absence_study/main/masjid_absence_study_screen.dart';
 export '../presentation/all/home/masjids/details/agenda/main/masjid_agenda_screen.dart';
 export '../presentation/all/home/masjids/details/certificate/main/masjid_certificate_screen.dart';
-export '../presentation/all/home/masjids/details/donation/main/masjid_donation_screen.dart';
+
 export '../presentation/all/home/masjids/details/profile/details/profile/profile_screen.dart';
 export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_dkm_screen.dart';
 export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_teacher_screeen.dart';
@@ -58,7 +62,7 @@ export '../presentation/all/home/masjids/details/absence_study/details/study/det
 
 //? My Activity
 export '../presentation/all/home/my_activity/main/my_activity_screen.dart';
-export '../presentation/all/home/my_activity/detail/more/main/more_screen.dart';
+export '../presentation/all/home/my_activity/detail/more/main/my_activity_more_screen.dart';
 export '../presentation/all/home/my_activity/detail/more/details/general_profile/main/umum_profile_screen.dart';
 export '../presentation/all/home/my_activity/detail/more/details/other_faq/main/other_faq_screen.dart';
 export '../presentation/all/home/my_activity/detail/more/details/other_suggestion_feedback/main/other_suggestion_feedback_screen.dart';
@@ -67,8 +71,9 @@ export '../presentation/all/home/my_activity/detail/more/details/general_appeara
 export '../presentation/all/home/my_activity/detail/more/details/general_theme/main/general_theme_screen.dart';
 export '../presentation/all/home/my_activity/detail/more/details/general_certificate/main/general_certificate_screen.dart';
 export '../presentation/all/home/donation/details/donation_history/main/donation_history_screen.dart';
-export '../presentation/all/home/my_activity/detail/lesson_history/main/lesson_history_screen.dart';
+export '../presentation/all/home/my_activity/detail/lesson_history/main/my_activity_lesson_history_screen.dart';
 export '../presentation/all/home/my_activity/detail/stats/main/stats_screen.dart';
+export '../presentation/all/home/my_activity/detail/lesson_income/main/my_activity_lesson_income_screen.dart';
 
 //& DKM
 export '../presentation/dkm/home/details/call_us/main/dkm_call_us_screen.dart';
@@ -80,7 +85,7 @@ export '../presentation/dkm/home/details/post/main/dkm_post_screen.dart';
 export '../presentation/dkm/home/details/profil_admin_masjid/main/dkm_profil_admin_screen.dart';
 export '../presentation/dkm/home/details/profil_masjid/main/dkm_profil_masjid_screen.dart';
 export '../presentation/dkm/home/details/stats/main/dkm_stats_screen.dart';
-export '../presentation/dkm/home/study/menu/dkm_study_screen.dart';
+export '../presentation/dkm/home/absence_study/menu/dkm_absence_study_screen.dart';
 
 //& DKM
 //& Profil Masjid
@@ -104,4 +109,12 @@ export '../presentation/dkm/home/details/information/details/add_information/dkm
 export '../presentation/dkm/home/add_study/main/dkm_add_study_screen.dart';
 export '../presentation/dkm/home/add_study/details/add_file/dkm_add_file_study_screen.dart';
 export '../presentation/dkm/home/add_study/details/confirm_add_study/dkm_confirm_add_study.dart';
-
+export '../presentation/dkm/home/absence_study/details/thema/main/dkm_thema_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/main/dkm_study_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/quiz/main/dkm_study_quiz_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/summary/main/dkm_study_summary_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/information/main/dkm_study_information_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/stats/main/dkm_study_stats_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/video/main/dkm_study_video_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/transciption/main/dkm_study_transciption_screen.dart';
+export '../presentation/dkm/home/absence_study/details/study/details/transciption/details/edit/dkm_study_edit_transciption_screen.dart';

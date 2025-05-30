@@ -94,7 +94,7 @@ class MoreScreen extends StatelessWidget {
                 _MenuTile(
                   icon: Icons.handshake_outlined,
                   label: "Kerjasama",
-                  onTap: () {},
+                  onTap: () => context.go('/home/collaboration'),
                 ),
               ],
             ),

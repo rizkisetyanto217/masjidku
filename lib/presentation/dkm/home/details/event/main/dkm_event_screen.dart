@@ -11,7 +11,7 @@ class _DkmEventScreenState extends State<DkmEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Event"), leading: const BackButton()),
+      appBar: AppBar(title: const Text("Acara"), leading: const BackButton()),
     );
   }
 }

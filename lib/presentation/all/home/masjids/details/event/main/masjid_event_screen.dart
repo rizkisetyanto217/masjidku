@@ -12,7 +12,7 @@ class _MasjidEventScreenState extends State<MasjidEventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Masjid Acara"),
+        title: const Text("Acara"),
         leading: const BackButton(),
         actions: const [
           Icon(Icons.search),

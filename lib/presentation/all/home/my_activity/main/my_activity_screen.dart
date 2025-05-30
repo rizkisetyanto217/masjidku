@@ -35,7 +35,7 @@ class MyActivityScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Kajian Saya",
+                              "Kajian Mendatang",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -67,7 +67,9 @@ class MyActivityScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: MainButton(
                           label: "Selengkapnya",
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push("/my-activity/lesson-income");
+                          },
                         ),
                       ),
                       // const SizedBox(height: 16),
