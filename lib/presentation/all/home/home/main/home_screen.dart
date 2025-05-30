@@ -9,14 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:masjidku/core/constants/app_color.dart';
 import 'package:masjidku/core/themes/app_theme.dart';
 
-class MasjidkuDashboard extends StatefulWidget {
-  const MasjidkuDashboard({Key? key}) : super(key: key);
+class MasjidkuMain extends StatefulWidget {
+  const MasjidkuMain({Key? key}) : super(key: key);
 
   @override
-  State<MasjidkuDashboard> createState() => _MasjidkuDashboardState();
+  State<MasjidkuMain> createState() => _MasjidkuMainState();
 }
 
-class _MasjidkuDashboardState extends State<MasjidkuDashboard> {
+class _MasjidkuMainState extends State<MasjidkuMain> {
   String waktuSholat = "Dzuhur 12.00";
   String tanggalHijriyah = "Kamis, 12 Syawwal 1446 H";
   String lokasi = "DKI Jakarta";

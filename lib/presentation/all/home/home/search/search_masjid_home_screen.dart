@@ -98,7 +98,7 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
                     selected: isSelected,
                     selectedColor: const Color(0xFF006B64),
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
+                      color: isSelected ? Colors.white : Colors.white,
                     ),
                     onSelected: (_) {
                       setState(() => selectedTab = index);

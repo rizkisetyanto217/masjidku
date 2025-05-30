@@ -5,8 +5,8 @@ export '../presentation/all/home/home/information/information_home_screen.dart';
 export '../presentation/all/home/home/search/search_masjid_home_screen.dart';
 
 //? Post
-export '../presentation/all/home/explore/main/posting_screen.dart';
-export '../presentation/all/home/explore/details/main/detail_posting_screen.dart';
+export '../presentation/all/home/post/main/posting_screen.dart';
+export '../presentation/all/home/post/details/main/detail_posting_screen.dart';
 
 export '../presentation/all/home/home/collaboration/main/collaboration_home_screen.dart';
 export '../presentation/all/home/home/explore/main/explore_home_screen.dart';
@@ -54,6 +54,7 @@ export '../presentation/all/home/masjids/details/absence_study/details/study/det
 export '../presentation/all/home/masjids/details/absence_study/details/study/details/information/main/study_Information_screen.dart';
 export '../presentation/all/home/masjids/details/absence_study/details/study/details/transciption/main/study_transcription_screen.dart';
 export '../presentation/all/home/masjids/details/absence_study/details/study/details/question_user/main/study_question_user_screen.dart';
+export '../presentation/all/home/masjids/details/absence_study/details/study/details/quiz/details/study_quiz_screen.dart';
 
 //? My Activity
 export '../presentation/all/home/my_activity/main/my_activity_screen.dart';
@@ -68,3 +69,39 @@ export '../presentation/all/home/my_activity/detail/more/details/general_certifi
 export '../presentation/all/home/donation/details/donation_history/main/donation_history_screen.dart';
 export '../presentation/all/home/my_activity/detail/lesson_history/main/lesson_history_screen.dart';
 export '../presentation/all/home/my_activity/detail/stats/main/stats_screen.dart';
+
+//& DKM
+export '../presentation/dkm/home/details/call_us/main/dkm_call_us_screen.dart';
+export '../presentation/dkm/home/details/event/main/dkm_event_screen.dart';
+export '../presentation/dkm/home/details/financial_report/main/dkm_financial_report_screen.dart';
+export '../presentation/dkm/home/details/information/main/dkm_information_screen.dart';
+export '../presentation/dkm/home/details/notification/main/dkm_notification_screen.dart';
+export '../presentation/dkm/home/details/post/main/dkm_post_screen.dart';
+export '../presentation/dkm/home/details/profil_admin_masjid/main/dkm_profil_admin_screen.dart';
+export '../presentation/dkm/home/details/profil_masjid/main/dkm_profil_masjid_screen.dart';
+export '../presentation/dkm/home/details/stats/main/dkm_stats_screen.dart';
+export '../presentation/dkm/home/study/menu/dkm_study_screen.dart';
+
+//& DKM
+//& Profil Masjid
+export '../presentation/dkm/home/details/profil_masjid/details/profil_dkm_pengajar/main/dkm_profil_dkm_pengajar_screen.dart';
+export '../presentation/dkm/home/details/profil_masjid/details/profil_masjid_detail/main/dkm_profil_masjid_detail_screen.dart';
+export '../presentation/dkm/home/details/profil_masjid/details/speech_dkm_pengajar/main/dkm_speech_dkm_pengajar_screen.dart';
+export '../presentation/dkm/home/details/profil_masjid/details/speech_dkm_pengajar/details/detail/dkm_speech_dkm_pengajar_detail_screen.dart';
+export '../presentation/dkm/home/details/profil_masjid/details/speech_dkm_pengajar/details/add_speech/dkm_add_speech_dkm_pengajar_screen.dart';
+
+//& DKM
+//& Post Masjid
+export '../presentation/dkm/home/details/post/details/add_post/dkm_add_post_screen.dart';
+
+//& DKM
+//& Notification &  Information
+export '../presentation/dkm/home/details/notification/details/add_notification/dkm_notification_screen.dart';
+export '../presentation/dkm/home/details/information/details/add_information/dkm_add_information.dart';
+
+//& DKM
+//& Study
+export '../presentation/dkm/home/add_study/main/dkm_add_study_screen.dart';
+export '../presentation/dkm/home/add_study/details/add_file/dkm_add_file_study_screen.dart';
+export '../presentation/dkm/home/add_study/details/confirm_add_study/dkm_confirm_add_study.dart';
+

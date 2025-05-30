@@ -57,12 +57,15 @@ class _TopBar extends StatelessWidget {
         ),
         Row(
           children: [
-            const Text(
-              "Dashboard",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+            InkWell(
+              onTap: () => GoRouter.of(context).go('/dkm'),
+              child: const Text(
+                "Dashboard",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             const SizedBox(width: 8),

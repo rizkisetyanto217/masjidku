@@ -4,6 +4,8 @@ import 'package:masjidku/core/themes/app_theme.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/routes/app_route.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +28,7 @@ class MasjidkuApp extends StatelessWidget {
 }
 
 class _AppWithTheme extends StatelessWidget {
+  // ignore: unused_element_parameter
   const _AppWithTheme({super.key});
 
   @override
@@ -39,11 +42,20 @@ class _AppWithTheme extends StatelessWidget {
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,
           routerConfig: router,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            quill.FlutterQuillLocalizations.delegate, // ⬅️ ini penting
+          ],
+          supportedLocales: const [
+            Locale('en'), // Tambahkan locale lain jika perlu
+          ],
           builder: (context, child) {
             return Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 500),
-                child: child, // 👈 ini wajib agar UI tetap muncul
+                child: child,
               ),
             );
           },
