@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masjidku/component/main/button/main_button.dart'; // pastikan path ini sesuai
 
 class DetailAgendaScreen extends StatelessWidget {
   final Map<String, String> data;
@@ -18,7 +19,6 @@ class DetailAgendaScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gambar agenda (jika ada)
             if (data['image'] != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -27,7 +27,6 @@ class DetailAgendaScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Informasi Kajian
             Text(
               "Informasi Kajian",
               style: TextStyle(
@@ -46,7 +45,6 @@ class DetailAgendaScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Keterangan
             Text(
               "Keterangan",
               style: TextStyle(
@@ -67,6 +65,18 @@ class DetailAgendaScreen extends StatelessWidget {
               "Semoga Allah ta’ala memudahkan kita untuk menuntut ilmu sebagai bentuk jalan menuju surga-Nya. Aamiin.",
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+        child: MainButton(
+          label: "Informasi Lengkap",
+          onPressed: () {
+            // TODO: Navigasi ke halaman detail atau tampilkan modal
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Menuju informasi lengkap...")),
+            );
+          },
         ),
       ),
     );

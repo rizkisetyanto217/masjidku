@@ -21,7 +21,7 @@ class MainScaffold extends StatelessWidget {
               context.read<NavigationCubit>().changeTab(index);
               switch (index) {
                 case 0:
-                  context.go('/home');
+                  context.go('/');
                   break;
                 case 1:
                   context.go('/time-pray');

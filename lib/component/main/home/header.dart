@@ -5,7 +5,7 @@ import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HeaderSection extends StatelessWidget {
-  final String quote;
+  final Widget quote;
 
   const HeaderSection({super.key, required this.quote});
 
@@ -28,7 +28,7 @@ class HeaderSection extends StatelessWidget {
         children: [
           _TopBar(),
           const SizedBox(height: 16),
-          _QuoteSection(quote: quote),
+          quote, // ✅ Gunakan langsung sebagai widget
           const SizedBox(height: 16),
           const _SearchBar(),
           const SizedBox(height: 16),

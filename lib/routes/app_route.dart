@@ -3,7 +3,7 @@ import 'package:masjidku/routes/user_route.dart';
 import 'package:masjidku/routes/dkm_route.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/',
   routes: [
     dkmRoutes,
     userRoutes, // ShellRoute

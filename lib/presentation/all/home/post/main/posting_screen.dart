@@ -15,7 +15,7 @@ class PostinganScreen extends StatefulWidget {
 
 class _PostinganScreenState extends State<PostinganScreen> {
   String selectedTab = "Semua";
-  final List<String> tabs = ["Semua", "Kajian"];
+  final List<String> tabs = ["Semua", "Motivasi"];
 
   final List<Map<String, dynamic>> posts = [
     {
@@ -24,6 +24,7 @@ class _PostinganScreenState extends State<PostinganScreen> {
           "\"Bersabarlah pada kebaikan maka Allah ta’ala akan mudahkan segalanya\"",
       "date": "3 Dzulhijjah 1445 H / 4 November 2025 M",
       "image": null,
+      "category": "Semua",
     },
     {
       "masjid": "Masjid At-Taufiq, Kampung Melayu",
@@ -32,6 +33,7 @@ class _PostinganScreenState extends State<PostinganScreen> {
       "date": "3 Dzulhijjah 1445 H / 4 November 2025 M",
       "image": "assets/images/sample.jpg",
       "dukungan": 2,
+      "category": "Semua",
     },
     {
       "masjid": "Masjid At-Taubah, Bandung Barat",
@@ -39,6 +41,18 @@ class _PostinganScreenState extends State<PostinganScreen> {
           "\"Qadarullah, Kajian Ustadz Budi dibatalkan karena ada udzur syar’i.\"",
       "date": "3 Dzulhijjah 1445 H / 4 November 2025 M",
       "image": null,
+      "category": "Semua",
+    },
+    {
+      "author": "Ibu Agus",
+      "message": "Semoga Allah ta’ala memudahkan orang-orang mukmin.",
+      "category": "Motivasi",
+    },
+    {
+      "author": "Ibu Harianto",
+      "message":
+          "Semoga Allah ta’ala memudahkan orang yang senantiasa menuntut ilmu.",
+      "category": "Motivasi",
     },
   ];
 
@@ -48,13 +62,16 @@ class _PostinganScreenState extends State<PostinganScreen> {
     context.read<NavigationCubit>().changeTab(2);
   }
 
+  List<Map<String, dynamic>> get filteredPosts {
+    if (selectedTab == "Semua") {
+      return posts.where((p) => p['category'] == 'Semua').toList();
+    } else {
+      return posts.where((p) => p['category'] == selectedTab).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filteredPosts =
-        selectedTab == "Semua"
-            ? posts
-            : posts.where((p) => p['image'] != null).toList();
-
     return Scaffold(
       appBar: AppBar(title: const Text("Postingan")),
       body: Column(
@@ -75,6 +92,9 @@ class _PostinganScreenState extends State<PostinganScreen> {
               itemCount: filteredPosts.length,
               itemBuilder: (context, index) {
                 final post = filteredPosts[index];
+                if (post['category'] == 'Motivasi') {
+                  return _buildMotivasiCard(post);
+                }
                 return GestureDetector(
                   onTap: () => context.go('/posting/detail', extra: post),
                   child: Padding(
@@ -89,6 +109,39 @@ class _PostinganScreenState extends State<PostinganScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMotivasiCard(Map<String, dynamic> post) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              post['author'] ?? '-',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 6),
+            Text(post['message'] ?? ''),
+            const SizedBox(height: 12),
+            Row(
+              children: const [
+                Icon(Icons.favorite_border, size: 16),
+                SizedBox(width: 4),
+                Text("Suka"),
+                SizedBox(width: 24),
+                Icon(Icons.share, size: 16),
+                SizedBox(width: 4),
+                Text("Bagikan"),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,6 +7,8 @@ import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
 import 'package:flutter/services.dart';
 import 'package:masjidku/core/constants/app_color.dart';
+import 'package:masjidku/core/constants/quick_access_items.dart';
+import 'package:masjidku/presentation/all/home/home/main/widget/qoute_header_widget.dart';
 
 class MasjidkuMain extends StatefulWidget {
   const MasjidkuMain({Key? key}) : super(key: key);
@@ -19,36 +21,10 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
   String waktuSholat = "Dzuhur 12.00";
   String tanggalHijriyah = "Kamis, 12 Syawwal 1446 H";
   String lokasi = "DKI Jakarta";
-  String kutipanHeader =
-      "“Sesungguhnya ilmu adalah rasa takut kepada Allah ta’ala.”";
-
   String tentangTitle = "Tentang Aplikasi";
   String tentangDeskripsi =
       "Masjidku adalah aplikasi yang bertujuan untuk membantu management masjid dan lembaga agar menghasilkan kualitas muslimin yang baik.";
   String tentangImage = "assets/images/masjidku-banner.png";
-
-  final List<Map<String, dynamic>> quickAccessItems = [
-    {
-      "icon": Icons.info_outline,
-      "label": "Informasi",
-      "route": "/home/information", // ✅ Benar
-    },
-    {
-      "icon": Icons.account_balance,
-      "label": "Masjid & Lembaga",
-      "route": "/search", // Tambahkan rute ini kalau kamu punya rutenya
-    },
-    {
-      "icon": Icons.handshake,
-      "label": "Kerjasama",
-      "route": "/home/collaboration", // ✅ Sesuai dengan definisi rute
-    },
-    {
-      "icon": Icons.explore,
-      "label": "Jelajahi",
-      "route": "/home/explore", // ✅ Sesuai dengan definisi rute
-    },
-  ];
 
   @override
   void initState() {
@@ -62,7 +38,6 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
       waktuSholat = "Ashar 15.00";
       tanggalHijriyah = "Jumat, 13 Syawwal 1446 H";
       lokasi = "Bandung";
-      kutipanHeader = "“Ilmu yang bermanfaat akan terus mengalir pahalanya.”";
     });
   }
 
@@ -71,7 +46,7 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderSection(quote: kutipanHeader),
+            HeaderSection(quote: const QuoteHeaderWidget()),
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -141,12 +116,16 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: AppColors.primary, // Sesuaikan dengan header kamu
-        statusBarIconBrightness: Brightness.light, // Biar ikon putih
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor:
+              Colors.transparent, // transparan agar warna header kelihatan
+          statusBarIconBrightness: Brightness.light, // biar icon putih
+        ),
+        child: _buildDashboardContent(),
       ),
-      child: Scaffold(body: _buildDashboardContent()),
     );
   }
 }

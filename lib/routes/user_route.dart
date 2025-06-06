@@ -7,7 +7,7 @@ final ShellRoute userRoutes = ShellRoute(
   builder: (context, state, child) => MainScaffold(child: child),
   routes: [
     GoRoute(
-      path: '/home',
+      path: '/',
       builder: (context, state) => const MasjidkuMain(),
       routes: [
         GoRoute(
