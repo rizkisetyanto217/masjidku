@@ -1,4 +1,4 @@
-// donation_screen.dart
+// ✅ Updated MasjidDonationScreen to accept masjid from route and use cubit
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -8,11 +8,14 @@ import 'package:masjidku/component/main/button/centered_outlined_button.dart';
 import 'package:masjidku/component/main/button/small_button_full.dart';
 import 'package:masjidku/core/constants/app_spacing.dart';
 import 'package:masjidku/presentation/all/home/donation/main/component/donation_field_component.dart';
-import 'package:masjidku/presentation/all/home/donation/main/model/donation_arguments.dart';
+
 import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/model/masjid_detail_profile.dart';
 
 class MasjidDonationScreen extends StatefulWidget {
-  const MasjidDonationScreen({super.key});
+  final MasjidDetailModel masjid;
+
+  const MasjidDonationScreen({super.key, required this.masjid});
 
   @override
   State<MasjidDonationScreen> createState() => _MasjidDonationScreenState();
@@ -58,7 +61,7 @@ class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
             DonationField(
               title: "Donasi Kajian",
               description:
-                  "100% dana donasi akan diperuntukkan untuk operasional kajian Aqidah bab iman Masjid At-Taufiq.",
+                  "100% dana donasi akan diperuntukkan untuk operasional kajian Aqidah bab iman Masjid ${widget.masjid.name}.",
               controller: donasiKajianController,
               selected: selectedKajian,
               onChanged: (val) {
@@ -67,10 +70,8 @@ class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
               formatter: formatter,
             ),
             SmallButtonFull(
-              label: 'Masjid At Taqwa, Ciracas, Jakarta Timur',
-              onPressed: () {
-                // Aksi ketika ditekan
-              },
+              label: '${widget.masjid.name}, ${widget.masjid.address}',
+              onPressed: () {},
             ),
             AppSpacing.lg,
             DonationField(
@@ -103,6 +104,8 @@ class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
                           extra: DonationArguments(
                             kajianAmount: kajian,
                             masjidAmount: masjid,
+                            masjidId: widget.masjid.masjidId,
+                            masjidSlug: widget.masjid.slug,
                           ),
                         );
                       }
@@ -115,4 +118,18 @@ class _MasjidDonationScreenState extends State<MasjidDonationScreen> {
       ),
     );
   }
+}
+
+class DonationArguments {
+  final int kajianAmount;
+  final int masjidAmount;
+  final String masjidId;
+  final String masjidSlug;
+
+  DonationArguments({
+    required this.kajianAmount,
+    required this.masjidAmount,
+    required this.masjidId,
+    required this.masjidSlug,
+  });
 }

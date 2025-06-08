@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/component/main/information/information_filter_tabs.dart';
 import 'package:masjidku/component/main/information/information_post_list.dart';
 import 'package:masjidku/core/constants/app_spacing.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/information/cubit/notification_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/information/cubit/notification_state.dart';
+import 'package:masjidku/presentation/all/home/masjids/model/masjid_detail_profile.dart';
 
 class InformationMasjidScreeen extends StatefulWidget {
-  const InformationMasjidScreeen({super.key});
+  final MasjidDetailModel masjid;
+  const InformationMasjidScreeen({super.key, required this.masjid});
 
   @override
   State<InformationMasjidScreeen> createState() =>
@@ -12,58 +17,10 @@ class InformationMasjidScreeen extends StatefulWidget {
 }
 
 class _InformationMasjidScreeenState extends State<InformationMasjidScreeen> {
-  final List<Map<String, String>> posts = [
-    {
-      'category': 'Informasi',
-      'time': '1 hari yang lalu',
-      'title':
-          'Quiz app sudah memiliki 10 materi baru pada pelajaran Aqidah akhlak. Bersiaplah dari sekarang....',
-      'content':
-          'Hari ini kajian bersama ustadz Abdul Somad. Silakan datang pukul 09.00 WIB. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-    },
-    {
-      'category': 'Peringatan',
-      'time': '1 jam yang lalu',
-      'title': 'Hari ini kajian ustadz abdul somad',
-    },
-    {
-      'category': 'Kajian Rutin',
-      'time': '2 hari yang lalu',
-      'title': 'Kajian tafsir pagi bersama ust. Khalid Basalamah.',
-    },
-    {
-      'category': 'Spesial Acara',
-      'time': '3 hari yang lalu',
-      'title':
-          'Acara buka bersama dan santunan anak yatim. Yuk ikut berdonasi!',
-    },
-    {
-      'category': 'Peringatan',
-      'time': '1 jam yang lalu',
-      'title':
-          'Mulai 12 agustus 2025. Quiz app akan melaksanakan program khusus menyambut hari raya Idul Adha. Bersiaplah dari sekarang....',
-    },
-  ];
-
-  late final List<String> categories;
   int selectedFilterIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    categories =
-        posts
-            .map((post) => post['category']!)
-            .toSet()
-            .toList(); // Unique categories from data
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final selectedCategory = categories[selectedFilterIndex];
-    final filteredPosts =
-        posts.where((post) => post['category'] == selectedCategory).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Informasi"),
@@ -75,7 +32,50 @@ class _InformationMasjidScreeenState extends State<InformationMasjidScreeen> {
           AppSpacing.sm,
         ],
       ),
-      body: Column(
+      body: BlocBuilder<NotificationCubit, NotificationState>(
+        builder: (context, state) {
+          if (state is NotificationLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is NotificationError) {
+            return Center(child: Text("Data belum ada: ${state.message}"));
+          } else if (state is NotificationLoaded) {
+            final posts = List<Map<String, dynamic>>.from(state.notifications);
+            return _buildBody(posts);
+          }
+          return const SizedBox(); // Initial state
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(List<Map<String, dynamic>> posts) {
+    // ✅ Extract kategori
+    final categories =
+        posts
+            .map((e) => (e['notification_category'] ?? 'Umum').toString())
+            .toSet() 
+            .toList();
+
+    // ✅ Jika tidak ada kategori
+    if (categories.isEmpty) {
+      return const Center(child: Text("Belum ada informasi tersedia."));
+    }
+
+    final selectedCategory = categories[selectedFilterIndex];
+
+    final filteredPosts =
+        posts.where((e) {
+          final category = (e['notification_category'] ?? 'Umum').toString();
+          return category == selectedCategory;
+        }).toList();
+
+    // ✅ Debug log
+    debugPrint("📂 Kategori tersedia: $categories");
+    debugPrint("📑 Kategori terpilih: $selectedCategory");
+    debugPrint("📋 Jumlah informasi: ${filteredPosts.length}");
+
+    if (filteredPosts.isEmpty) {
+      return Column(
         children: [
           AppSpacing.md,
           InformationFilterTabs(
@@ -83,9 +83,31 @@ class _InformationMasjidScreeenState extends State<InformationMasjidScreeen> {
             selectedIndex: selectedFilterIndex,
             onSelected: (i) => setState(() => selectedFilterIndex = i),
           ),
-          InformationPostList(data: filteredPosts),
+          const Expanded(child: Center(child: Text("Belum ada informasi."))),
         ],
-      ),
+      );
+    }
+
+    final displayData =
+        filteredPosts.map((e) {
+          return {
+            'category': (e['notification_category'] ?? 'Umum').toString(),
+            'time': (e['notification_created_at'] ?? 'Baru saja').toString(),
+            'title': (e['notification_title'] ?? '-').toString(),
+            'content': (e['notification_description'] ?? '').toString(),
+          };
+        }).toList();
+
+    return Column(
+      children: [
+        AppSpacing.md,
+        InformationFilterTabs(
+          categories: categories,
+          selectedIndex: selectedFilterIndex,
+          onSelected: (i) => setState(() => selectedFilterIndex = i),
+        ),
+        InformationPostList(data: displayData),
+      ],
     );
   }
 }

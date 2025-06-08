@@ -31,10 +31,10 @@ export '../presentation/all/home/masjids/details/absence_study/main/masjid_absen
 export '../presentation/all/home/masjids/details/agenda/main/masjid_agenda_screen.dart';
 export '../presentation/all/home/masjids/details/certificate/main/masjid_certificate_screen.dart';
 
-export '../presentation/all/home/masjids/details/profile/details/profile/profile_screen.dart';
-export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_dkm_screen.dart';
-export '../presentation/all/home/masjids/details/profile/details/masjid_dkm_teacher/masjid_teacher_screeen.dart';
-export '../presentation/all/home/masjids/details/profile/details/speech/main/speech_screen.dart';
+export '../presentation/all/home/masjids/details/profile/profile/profile_screen.dart';
+export '../presentation/all/home/masjids/details/profile/masjid_dkm_teacher/masjid_dkm_screen.dart';
+export '../presentation/all/home/masjids/details/profile/masjid_dkm_teacher/masjid_teacher_screeen.dart';
+export '../presentation/all/home/masjids/details/profile/speech/main/speech_screen.dart';
 export '../presentation/all/home/masjids/main/masjids_detail_posting_screen.dart';
 export '../presentation/all/home/masjids/details/agenda/details/detail_agenda/detail_agenda_screen.dart';
 export '../presentation/all/home/masjids/details/absence_study/details/main/thema_screen.dart';

@@ -2,326 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/accesoris/border/gap_border_separator.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
-import 'package:masjidku/presentation/all/home/masjids/details/profile/components/speech_card_component.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/main/widget/section_pengurus_pengajar.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/main/widget/section_profile_lembaga.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/main/widget/section_sambutan.dart';
+import 'package:masjidku/presentation/all/home/masjids/widget/donation_bottom_button.dart';
+import 'package:masjidku/presentation/all/home/masjids/widget/masjid_header.dart';
+import 'package:masjidku/presentation/all/home/masjids/model/masjid_detail_profile.dart';
 
-class ProfilMasjidPage extends StatelessWidget {
-  const ProfilMasjidPage({super.key});
+class ProfilMasjidScreen extends StatelessWidget {
+  final MasjidDetailModel masjid;
+  const ProfilMasjidScreen({super.key, required this.masjid});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: const [
-          HeaderMasjid(),
+        children: [
+          MasjidHeader(
+            name: masjid.name,
+            bioShort: masjid.bioShort,
+            address: masjid.address,
+            joinedAt: masjid.joinedAt,
+            instagramUrl: masjid.instagramUrl,
+            whatsappUrl: masjid.whatsappUrl,
+            youtubeUrl: masjid.youtubeUrl,
+            masjidSlug: masjid.slug,
+            isFollowing: false, // atau ambil dari state jika perlu
+            onFollowToggle: () {}, // bisa diabaikan jika non-interaktif di sini
+          ),
           GapBorderSeparator(),
           SizedBox(height: 16),
-          SectionProfilLembaga(),
+          SectionProfilLembaga(
+            masjidId: masjid.masjidId, // ✅ tambahkan ini
+          ),
+
           GapBorderSeparator(),
           SizedBox(height: 16),
-          SectionPengurusPengajar(),
+          SectionPengurusPengajar(slug: masjid.slug, masjid: masjid),
           GapBorderSeparator(),
           SizedBox(height: 16),
-          SectionSambutan(),
+          SectionSambutan(slug: masjid.slug, masjid: masjid), // ✅ benar,
           SizedBox(height: 16),
         ],
       ),
-      bottomNavigationBar: const DonationBottomButton(),
-    );
-  }
-}
-
-class HeaderMasjid extends StatelessWidget {
-  const HeaderMasjid({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 150,
-          color: Colors.grey[300],
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          alignment: Alignment.topLeft,
-          child: GestureDetector(
-            onTap: () => context.go('/masjid'),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              size: 24,
-              color: Colors.black54,
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'assets/images/image-masjid.png', // ganti sesuai path ikon masjid
-                    width: 32,
-                    height: 32,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      'Masjid Jami’ At-Taqwa',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF00796B),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Dikelola oleh DKM Masjid untuk ummat muslim',
-                style: TextStyle(color: Colors.grey, fontSize: 13),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Jln. Sawo Besar No.95. Tanah Abang, Jakarta Pusat, DKI Jakarta',
-                style: TextStyle(fontSize: 13),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'Bergabung pada April 2025',
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              const SizedBox(height: 8),
-              const Row(
-                children: [
-                  Text('300 ', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Postingan'),
-                  SizedBox(width: 16),
-                  Text('300 ', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Pengikut'),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class SectionProfilLembaga extends StatelessWidget {
-  const SectionProfilLembaga({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SectionTitle(icon: Icons.menu_book, title: "Profil Lembaga"),
-          const SizedBox(height: 8),
-          const Text(
-            "Masjid At-Taqwa didirikan pada tahun 2000 dengan tujuan untuk menjadi tempat ibadah untuk warga Ciracas dan sekitarnya",
-            style: TextStyle(fontSize: 14),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => context.go('/masjid/profile/full-profile'),
-              icon: const Icon(Icons.chevron_right),
-              label: const Text("Profil Lengkap"),
-              style: OutlinedButton.styleFrom(
-                alignment: Alignment.centerLeft, // ⬅️ label tetap di kiri
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SectionPengurusPengajar extends StatelessWidget {
-  const SectionPengurusPengajar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final iconColor = theme.colorScheme.primary;
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.groups, color: iconColor),
-              const SizedBox(width: 8),
-              Text(
-                "Pengurus & Pengajar",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: iconColor,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "Pengurus dan Pengajar berasal dari masyarakat setempat yang memiliki tujuan ingin memajukan Masjid",
-            style: TextStyle(fontSize: 14),
-          ),
-          const SizedBox(height: 12),
-          _InfoTile(
-            icon: Icons.description_outlined,
-            label: "Pengajar dan Imam",
-            subLabel: "Profil Asatizah",
-            badgeCount: 11,
-            onTap: () => GoRouter.of(context).push('/masjid/profile/teacher'),
-          ),
-          const SizedBox(height: 16),
-          _InfoTile(
-            icon: Icons.description_outlined,
-            label: "Pengurus",
-            subLabel: "Profil Pengurus DKM",
-            badgeCount: 6,
-            onTap: () => GoRouter.of(context).push('/masjid/profile/dkm'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _InfoTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String subLabel;
-  final int badgeCount;
-  final VoidCallback? onTap;
-
-  const _InfoTile({
-    required this.icon,
-    required this.label,
-    required this.subLabel,
-    required this.badgeCount,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: theme.dividerColor),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 32, color: theme.colorScheme.primary),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        label,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 6),
-                      CircleAvatar(
-                        radius: 10,
-                        backgroundColor: theme.colorScheme.primary,
-                        child: Text(
-                          '$badgeCount',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subLabel,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SectionSambutan extends StatelessWidget {
-  const SectionSambutan({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "🗣️ Sambutan dan Motivasi",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Color(0xFF00796B),
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "Tulisan dari pengurus, pengajar dan jamaah Masjid At-Taqwa",
-          ),
-          const SizedBox(height: 12),
-          const SpeechCard(
-            name: "Muhammad",
-            role: "Pengajar",
-            message:
-                "Semoga Allah ta’ala mudahkan kita dalam menuntut ilmu agama. Allah ta’ala berikan kemudahan bagi kita semua terutama bagi orang-orang yang sedang kesulitan agar dilancarkan usahanya..",
-          ),
-          const SizedBox(height: 8),
-          const SpeechCard(
-            name: "Budi",
-            role: "Ketua DKM",
-            message:
-                "Semoga Allah ta’ala mudahkan kita dalam menuntut ilmu agama. Allah ta’ala berikan kemudahan bagi kita semua terutama bagi orang-orang yang sedang kesulitan agar dilancarkan usahanya.",
-          ),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed:
-                () => GoRouter.of(context).push('/masjid/profile/speech'),
-            icon: const Icon(Icons.chevron_right),
-            label: const Text("Selengkapnya"),
-          ),
-        ],
+      bottomNavigationBar: DonationBottomButton(
+        slug: masjid.slug,
+        masjid: masjid,
       ),
     );
   }
@@ -348,23 +74,6 @@ class SectionTitle extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class DonationBottomButton extends StatelessWidget {
-  const DonationBottomButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: MainButton(
-          label: "Donasi",
-          onPressed: () => GoRouter.of(context).push('/masjid/donation'),
-        ),
-      ),
     );
   }
 }

@@ -48,7 +48,7 @@ class MasjidListTile extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(masjid.masjidLocation),
-      onTap: () => context.go('/masjid'),
+      onTap: () => context.go('/masjid/${masjid.masjidSlug}'),
     );
   }
 }

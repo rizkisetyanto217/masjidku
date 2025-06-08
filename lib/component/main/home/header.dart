@@ -3,11 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HeaderSection extends StatelessWidget {
   final Widget quote;
+  final bool isLoggedIn;
 
-  const HeaderSection({super.key, required this.quote});
+  const HeaderSection({
+    super.key,
+    required this.quote,
+    required this.isLoggedIn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class HeaderSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TopBar(),
+          _TopBar(isLoggedIn: isLoggedIn),
           const SizedBox(height: 16),
           quote, // ✅ Gunakan langsung sebagai widget
           const SizedBox(height: 16),
@@ -41,11 +47,11 @@ class HeaderSection extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
+  final bool isLoggedIn;
+  const _TopBar({required this.isLoggedIn});
+
   @override
   Widget build(BuildContext context) {
-    final themeCubit = context.read<ThemeCubit>();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -58,10 +64,12 @@ class _TopBar extends StatelessWidget {
         Row(
           children: [
             InkWell(
-              onTap: () => GoRouter.of(context).go('/dkm'),
-              child: const Text(
-                "Dashboard",
-                style: TextStyle(
+              onTap: () {
+                context.go(isLoggedIn ? '/dkm' : '/login');
+              },
+              child: Text(
+                isLoggedIn ? "Dashboard" : "Login",
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -69,15 +77,6 @@ class _TopBar extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            IconButton(
-              icon: Icon(
-                isDark ? Icons.dark_mode : Icons.light_mode,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                themeCubit.toggleTheme();
-              },
-            ),
           ],
         ),
       ],

@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
+import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
+import 'package:masjidku/presentation/all/home/masjids/cubit/masjid_detail_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/donation/cubit/masjid_donation_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/information/cubit/notification_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
+import 'package:masjidku/presentation/all/home/masjids/details/profile/main/model/masjid_profile_model.dart';
+import 'package:masjidku/presentation/all/home/masjids/model/masjid_detail_profile.dart';
 import 'main_scaffold.dart';
 import 'pages_router.dart';
 
@@ -42,6 +51,8 @@ final ShellRoute userRoutes = ShellRoute(
 );
 
 final List<GoRoute> userExtraRoutes = [
+  GoRoute(path: '/login', builder: (_, _) => const LoginScreen()),
+  GoRoute(path: '/register', builder: (_, _) => const RegisterScreen()),
   GoRoute(
     path: '/home/collaboration',
     builder: (_, __) => const CollaborationHomeScreen(),
@@ -89,23 +100,72 @@ final List<GoRoute> userExtraRoutes = [
   GoRoute(path: '/my-activity/stats', builder: (_, __) => const StatsScreen()),
   GoRoute(path: '/search', builder: (_, __) => const SearchMasjidScreen()),
   GoRoute(
-    path: '/masjid',
-    builder: (_, __) => const MasjidScreen(),
+    path: '/masjid/:slug',
+    builder: (context, state) {
+      final slug = state.pathParameters['slug']!;
+      return BlocProvider(
+        create: (_) => MasjidDetailCubit()..fetchMasjidDetail(slug),
+        child: MasjidScreen(slug: slug),
+      );
+    },
     routes: [
       GoRoute(
         path: 'profile',
-        builder: (_, __) => const ProfilMasjidPage(),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! MasjidDetailModel) {
+            return const Scaffold(
+              body: Center(child: Text("Data masjid tidak valid")),
+            );
+          }
+
+          return BlocProvider(
+            create: (_) => MasjidProfileTeacherCubit()..fetch(extra.masjidId),
+            child: ProfilMasjidScreen(masjid: extra),
+          );
+        },
         routes: [
           GoRoute(
             path: 'full-profile',
-            builder: (_, __) => const MasjidProfilScreen(),
+            builder: (context, state) {
+              final profile = state.extra as MasjidProfileModel;
+              return MasjidProfilScreen(profile: profile);
+            },
           ),
           GoRoute(
             path: 'teacher',
-            builder: (_, __) => const MasjidTeacherScreeen(),
+            builder: (context, state) {
+              final masjid = state.extra as MasjidDetailModel;
+              return BlocProvider(
+                create:
+                    (_) => MasjidProfileTeacherCubit()..fetch(masjid.masjidId),
+                child: MasjidTeacherScreeen(slug: masjid.slug),
+              );
+            },
           ),
-          GoRoute(path: 'dkm', builder: (_, __) => const MasjidDKMScreen()),
-          GoRoute(path: 'speech', builder: (_, __) => const SpeechScreen()),
+          GoRoute(
+            path: 'dkm',
+            builder: (context, state) {
+              final masjid = state.extra as MasjidDetailModel;
+              return BlocProvider(
+                create:
+                    (_) => MasjidProfileTeacherCubit()..fetch(masjid.masjidId),
+                child: MasjidDKMScreen(slug: masjid.slug),
+              );
+            },
+          ),
+
+          GoRoute(
+            path: 'speech',
+            builder: (context, state) {
+              final masjid = state.extra as MasjidDetailModel;
+              return BlocProvider(
+                create:
+                    (_) => MasjidProfileTeacherCubit()..fetch(masjid.masjidId),
+                child: SpeechScreen(slug: masjid.slug),
+              );
+            },
+          ),
         ],
       ),
       GoRoute(
@@ -122,8 +182,24 @@ final List<GoRoute> userExtraRoutes = [
       ),
       GoRoute(
         path: 'information',
-        builder: (_, __) => const InformationMasjidScreeen(),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra == null || extra is! MasjidDetailModel) {
+            return const Scaffold(
+              body: Center(child: Text("Data masjid tidak ditemukan")),
+            );
+          }
+
+          final masjid = extra;
+
+          return BlocProvider(
+            create:
+                (_) => NotificationCubit()..fetchByMasjidId(masjid.masjidId),
+            child: InformationMasjidScreeen(masjid: masjid),
+          );
+        },
       ),
+
       GoRoute(
         path: 'financial-report',
         builder: (_, __) => const MasjidFinancialReportScreen(),
@@ -181,33 +257,40 @@ final List<GoRoute> userExtraRoutes = [
               ),
             ],
           ),
+          GoRoute(
+            path: 'study',
+            builder: (_, __) => const StudyScreen(),
+            routes: [
+              GoRoute(
+                path: 'information',
+                builder: (_, __) => const StudyInformationScreen(),
+              ),
+              GoRoute(
+                path: 'quiz',
+                builder: (_, __) => const StudyQuizScreen(),
+              ),
+              GoRoute(
+                path: 'transcription',
+                builder: (_, __) => const StudyTranscriptionScreen(),
+              ),
+              GoRoute(
+                path: 'summary',
+                builder: (_, __) => const StudySummaryScreen(),
+              ),
+              GoRoute(
+                path: 'video',
+                builder: (_, __) => const StudyVideoScreen(),
+              ),
+              GoRoute(path: 'faq', builder: (_, __) => const StudyFaqScreen()),
+              GoRoute(
+                path: 'question-user',
+                builder: (_, __) => const StudyQuestionUserScreen(),
+              ),
+            ],
+          ),
         ],
       ),
-      GoRoute(
-        path: 'study',
-        builder: (_, __) => const StudyScreen(),
-        routes: [
-          GoRoute(
-            path: 'information',
-            builder: (_, __) => const StudyInformationScreen(),
-          ),
-          GoRoute(path: 'quiz', builder: (_, __) => const StudyQuizScreen()),
-          GoRoute(
-            path: 'transcription',
-            builder: (_, __) => const StudyTranscriptionScreen(),
-          ),
-          GoRoute(
-            path: 'summary',
-            builder: (_, __) => const StudySummaryScreen(),
-          ),
-          GoRoute(path: 'video', builder: (_, __) => const StudyVideoScreen()),
-          GoRoute(path: 'faq', builder: (_, __) => const StudyFaqScreen()),
-          GoRoute(
-            path: 'question-user',
-            builder: (_, __) => const StudyQuestionUserScreen(),
-          ),
-        ],
-      ),
+
       GoRoute(
         path: 'agenda',
         builder: (_, __) => const AgendaMasjidScreen(),
@@ -233,7 +316,19 @@ final List<GoRoute> userExtraRoutes = [
       ),
       GoRoute(
         path: 'donation',
-        builder: (_, __) => const MasjidDonationScreen(),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! MasjidDetailModel) {
+            return const Scaffold(
+              body: Center(child: Text("Data masjid tidak valid")),
+            );
+          }
+
+          return BlocProvider(
+            create: (_) => MasjidDonationCubit()..setMasjid(extra),
+            child: MasjidDonationScreen(masjid: extra),
+          );
+        },
       ),
     ],
   ),

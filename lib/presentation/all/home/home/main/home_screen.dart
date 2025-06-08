@@ -6,9 +6,9 @@ import 'package:masjidku/component/main/home/player_info_card.dart';
 import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
 import 'package:flutter/services.dart';
-import 'package:masjidku/core/constants/app_color.dart';
 import 'package:masjidku/core/constants/quick_access_items.dart';
 import 'package:masjidku/presentation/all/home/home/main/widget/qoute_header_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MasjidkuMain extends StatefulWidget {
   const MasjidkuMain({Key? key}) : super(key: key);
@@ -18,6 +18,7 @@ class MasjidkuMain extends StatefulWidget {
 }
 
 class _MasjidkuMainState extends State<MasjidkuMain> {
+  bool isLoggedIn = false;
   String waktuSholat = "Dzuhur 12.00";
   String tanggalHijriyah = "Kamis, 12 Syawwal 1446 H";
   String lokasi = "DKI Jakarta";
@@ -29,7 +30,19 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
   @override
   void initState() {
     super.initState();
+    checkLoginStatus();
     getDataFromAPI();
+  }
+
+  Future<void> checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token'); // asumsi key-nya "token"
+    if (token != null && token.isNotEmpty) {
+      // Kamu bisa tambahkan pengecekan expired atau validasinya juga kalau perlu
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
   }
 
   Future<void> getDataFromAPI() async {
@@ -46,7 +59,11 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderSection(quote: const QuoteHeaderWidget()),
+            HeaderSection(
+              quote: const QuoteHeaderWidget(),
+              isLoggedIn: isLoggedIn,
+            ),
+
             Stack(
               clipBehavior: Clip.none,
               children: [

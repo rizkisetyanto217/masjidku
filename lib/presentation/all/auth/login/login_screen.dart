@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -131,10 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           recognizer:
                               TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushReplacementNamed(
-                                    context,
+                                  context.go(
                                     '/register',
-                                  );
+                                  ); // ✅ Ganti dengan GoRouter
                                 },
                         ),
                       ],

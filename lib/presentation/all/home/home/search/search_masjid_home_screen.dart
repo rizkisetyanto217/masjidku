@@ -23,6 +23,7 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
       masjidName: "Masjid Jami’ At Taqwa",
       masjidLocation: "Ciracas, Jakarta Timur",
       masjidImage: "assets/images/image-masjid.png",
+      masjidSlug: "Masjid-Jami-At-Taqwa",
     ),
   ];
 
