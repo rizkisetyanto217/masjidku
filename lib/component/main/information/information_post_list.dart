@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masjidku/presentation/all/home/home/information/details/information_detail_screen.dart';
+import 'package:masjidku/presentation/all/home/information/details/information_detail_screen.dart';
 
 class InformationPostList extends StatelessWidget {
   final List<Map<String, String>> data;

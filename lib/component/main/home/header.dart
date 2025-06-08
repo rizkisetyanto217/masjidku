@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:masjidku/core/themes/theme_cubit.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-class HeaderSection extends StatelessWidget {
+class HeaderSection extends StatefulWidget {
   final Widget quote;
-  final bool isLoggedIn;
 
-  const HeaderSection({
-    super.key,
-    required this.quote,
-    required this.isLoggedIn,
-  });
+  const HeaderSection({super.key, required this.quote});
+
+  @override
+  State<HeaderSection> createState() => _HeaderSectionState();
+}
+
+class _HeaderSectionState extends State<HeaderSection> {
+  final storage = const FlutterSecureStorage();
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  Future<void> checkLoginStatus() async {
+    final token = await storage.read(key: 'access_token');
+    setState(() {
+      isLoggedIn = token != null;
+    });
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await storage.deleteAll();
+    setState(() => isLoggedIn = false);
+    if (context.mounted) context.go('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +51,9 @@ class HeaderSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _TopBar(isLoggedIn: isLoggedIn),
+          _TopBar(isLoggedIn: isLoggedIn, onLogout: () => logout(context)),
           const SizedBox(height: 16),
-          quote, // ✅ Gunakan langsung sebagai widget
+          widget.quote,
           const SizedBox(height: 16),
           const _SearchBar(),
           const SizedBox(height: 16),
@@ -48,57 +67,34 @@ class HeaderSection extends StatelessWidget {
 
 class _TopBar extends StatelessWidget {
   final bool isLoggedIn;
-  const _TopBar({required this.isLoggedIn});
+  final VoidCallback onLogout;
+
+  const _TopBar({required this.isLoggedIn, required this.onLogout});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Image.asset("assets/images/masjidku-logo.png", height: 28),
-            const SizedBox(width: 8),
-          ],
-        ),
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                context.go(isLoggedIn ? '/dkm' : '/login');
-              },
-              child: Text(
-                isLoggedIn ? "Dashboard" : "Login",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+        Image.asset("assets/images/masjidku-logo.png", height: 28),
+        InkWell(
+          onTap: () {
+            if (isLoggedIn) {
+              onLogout();
+            } else {
+              context.go('/login');
+            }
+          },
+          child: Text(
+            isLoggedIn ? "Logout" : "Login",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(width: 8),
-          ],
+          ),
         ),
       ],
-    );
-  }
-}
-
-class _QuoteSection extends StatelessWidget {
-  final String quote;
-  const _QuoteSection({required this.quote});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Text(
-      quote,
-      style: TextStyle(
-        fontStyle: FontStyle.italic,
-        color: colorScheme.onPrimary,
-        fontSize: 16,
-      ),
     );
   }
 }

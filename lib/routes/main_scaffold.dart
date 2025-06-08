@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/home/button_nav.dart';
-import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
+import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
 
 class MainScaffold extends StatelessWidget {
   final Widget child;

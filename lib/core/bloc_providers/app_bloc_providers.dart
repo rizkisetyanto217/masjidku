@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masjidku/presentation/all/home/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
-import 'package:masjidku/presentation/all/home/home/main/cubit/quote/quotes_cubit.dart';
-import 'package:masjidku/presentation/all/home/home/main/cubit/navigation_cubit.dart';
+import 'package:masjidku/presentation/all/auth/login/service/auth_service.dart';
+import 'package:masjidku/presentation/all/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
+import 'package:masjidku/presentation/all/home/main/cubit/quote/quotes_cubit.dart';
+import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
-import 'package:masjidku/presentation/all/home/home/search/cubit/masjid_cubit.dart';
-import 'package:masjidku/presentation/all/home/masjids/details/donation/cubit/masjid_donation_cubit.dart';
-import 'package:masjidku/presentation/all/home/masjids/details/information/cubit/notification_cubit.dart';
-import 'package:masjidku/presentation/all/home/masjids/details/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
+import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/details/donation/cubit/masjid_donation_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/details/information/cubit/notification_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/details/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
+import 'package:masjidku/presentation/all/auth/login/cubit/login_cubit.dart';
+import 'package:masjidku/presentation/all/auth/login/cubit/login_google_cubit.dart';
 
 class AppBlocProviders extends StatelessWidget {
   final Widget child;
@@ -26,6 +29,10 @@ class AppBlocProviders extends StatelessWidget {
         BlocProvider(create: (_) => NotificationCubit()),
         BlocProvider(create: (_) => MasjidProfileTeacherCubit()),
         BlocProvider(create: (_) => MasjidDonationCubit()),
+        BlocProvider(create: (_) => LoginCubit(authService: AuthService())),
+        BlocProvider(
+          create: (_) => LoginGoogleCubit(authService: AuthService()),
+        ),
       ],
       child: child,
     );
