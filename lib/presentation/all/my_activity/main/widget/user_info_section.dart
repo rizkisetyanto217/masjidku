@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
+import 'package:masjidku/core/utils/auth_cubit.dart';
 
 class UserInfoSection extends StatelessWidget {
   const UserInfoSection({super.key});
@@ -10,10 +11,13 @@ class UserInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return FutureBuilder<String?>(
-      future: const FlutterSecureStorage().read(key: 'access_token'),
-      builder: (context, snapshot) {
-        final isLoggedIn = snapshot.hasData && snapshot.data != null;
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state.isChecking) {
+          return const SizedBox();
+        }
+
+        final isLoggedIn = state.isLoggedIn;
 
         if (!isLoggedIn) {
           return Container(

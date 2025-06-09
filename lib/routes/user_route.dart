@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
 import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
-import 'package:masjidku/presentation/all/masjids/cubit/masjid_detail_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/details/donation/cubit/masjid_donation_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/details/information/cubit/notification_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/details/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/details/profile/main/model/masjid_profile_model.dart';
-import 'package:masjidku/presentation/all/masjids/model/masjid_detail_profile.dart';
+import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/donation/cubit/masjid_donation_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/information/cubit/notification_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/profile/main/model/masjid_profile_model.dart';
+import 'package:masjidku/presentation/all/masjids/main/model/masjid_detail_profile.dart';
 import 'main_scaffold.dart';
 import 'pages_router.dart';
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dio/dio.dart';
+
 import 'package:masjidku/component/main/button/small_button.dart';
 import 'package:masjidku/core/constants/app_color.dart';
+import 'package:masjidku/core/utils/auth_cubit.dart';
 
 class UserProfileSection extends StatelessWidget {
   const UserProfileSection({super.key});
@@ -12,12 +14,18 @@ class UserProfileSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return FutureBuilder<String?>(
-      future: const FlutterSecureStorage().read(key: 'access_token'),
-      builder: (context, snapshot) {
-        final isLoggedIn = snapshot.hasData && snapshot.data != null;
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state.isChecking) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
 
-        if (!isLoggedIn) {
+        if (!state.isLoggedIn || state.token == null) {
           return Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -51,8 +59,9 @@ class UserProfileSection extends StatelessWidget {
           );
         }
 
+        // Sudah login, tampilkan data
         return FutureBuilder<Map<String, dynamic>>(
-          future: _fetchUserData(snapshot.data!),
+          future: _fetchUserData(state.token!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

@@ -1,23 +1,28 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
-import 'package:masjidku/component/main/button/main_button.dart';
-import 'package:masjidku/component/main/button/small_button.dart';
-import 'package:masjidku/core/constants/app_color.dart';
+import 'package:masjidku/core/utils/auth_cubit.dart';
 import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/upcoming_kajian.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/user_info_section.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/user_profile_section.dart';
 
-class MyActivityScreen extends StatelessWidget {
+class MyActivityScreen extends StatefulWidget {
   const MyActivityScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    context.read<NavigationCubit>().changeTab(4);
+  State<MyActivityScreen> createState() => _MyActivityScreenState();
+}
 
+class _MyActivityScreenState extends State<MyActivityScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NavigationCubit>().changeTab(4);
+    context.read<AuthCubit>().checkLoginStatus(); // ⬅️ Pindah ke sini
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Aktivitas Saya"), elevation: 0),
       body: LayoutBuilder(
@@ -28,13 +33,12 @@ class MyActivityScreen extends StatelessWidget {
                 child: IntrinsicHeight(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // const SizedBox(height: 16),
+                    children: const [
                       UserProfileSection(),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       UserInfoSection(),
-                      const SizedBox(height: 12),
-                      UpcomingKajianSection(),
+                      SizedBox(height: 12),
+                      UpcomingKajianSection(), // ⬅️ ini akan rebuild saat state AuthCubit berubah
                     ],
                   ),
                 ),
@@ -44,4 +48,3 @@ class MyActivityScreen extends StatelessWidget {
     );
   }
 }
-

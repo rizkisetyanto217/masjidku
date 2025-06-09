@@ -1,5 +1,3 @@
-// MasjidScreen (refactored)
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,22 +5,70 @@ import 'package:masjidku/component/main/accesoris/border/gap_border_separator.da
 import 'package:masjidku/component/main/button/main_button.dart';
 import 'package:masjidku/component/main/posting/post_image_item.dart';
 import 'package:masjidku/component/main/posting/post_text_item.dart';
-import 'package:masjidku/presentation/all/masjids/cubit/masjid_detail_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/cubit/masjid_detail_state.dart';
-import 'package:masjidku/presentation/all/masjids/model/masjid_detail_profile.dart';
-import 'package:masjidku/presentation/all/masjids/widget/masjid_header.dart';
+import 'package:masjidku/core/utils/auth_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_state.dart';
+import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_follow_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/main/model/masjid_detail_profile.dart';
+import 'package:masjidku/presentation/all/masjids/main/widget/masjid_header.dart';
 
-class MasjidScreen extends StatefulWidget {
+class MasjidScreen extends StatelessWidget {
   final String slug;
   const MasjidScreen({super.key, required this.slug});
 
   @override
-  State<MasjidScreen> createState() => _MasjidScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: BlocBuilder<MasjidDetailCubit, MasjidDetailState>(
+          builder: (context, state) {
+            if (state is MasjidDetailLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is MasjidDetailError) {
+              return Center(child: Text(state.message));
+            } else if (state is MasjidDetailLoaded) {
+              final masjid = state.masjid;
+              return BlocProvider(
+                create: (_) => MasjidFollowCubit(masjidId: masjid.masjidId),
+                child: _MasjidContent(slug: slug, masjid: masjid),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+      ),
+      bottomNavigationBar: BlocBuilder<MasjidDetailCubit, MasjidDetailState>(
+        builder: (context, state) {
+          final isReady = state is MasjidDetailLoaded;
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            child: MainButton(
+              label: "Donasi",
+              onPressed:
+                  isReady
+                      ? () => context.push(
+                        '/masjid/$slug/donation',
+                        extra: (state as MasjidDetailLoaded).masjid,
+                      )
+                      : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
-class _MasjidScreenState extends State<MasjidScreen> {
-  MasjidDetailModel? masjidData;
-  bool isFollowing = true;
+class _MasjidContent extends StatefulWidget {
+  final MasjidDetailModel masjid;
+  final String slug;
+  const _MasjidContent({required this.masjid, required this.slug});
+
+  @override
+  State<_MasjidContent> createState() => _MasjidContentState();
+}
+
+class _MasjidContentState extends State<_MasjidContent> {
   int selectedTabIndex = 0;
   int selectedTab = 0;
 
@@ -37,87 +83,82 @@ class _MasjidScreenState extends State<MasjidScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BlocBuilder<MasjidDetailCubit, MasjidDetailState>(
-          builder: (context, state) {
-            if (state is MasjidDetailLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MasjidDetailError) {
-              return Center(child: Text(state.message));
-            } else if (state is MasjidDetailLoaded) {
-              masjidData = state.masjid;
-              return _buildContent(masjidData!);
-            }
-            return const SizedBox();
-          },
-        ),
-      ),
-      bottomNavigationBar: BlocBuilder<MasjidDetailCubit, MasjidDetailState>(
-        builder: (context, state) {
-          final isReady = state is MasjidDetailLoaded;
-
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: MainButton(
-              label: "Donasi",
-              onPressed:
-                  isReady
-                      ? () => context.push(
-                        '/masjid/${widget.slug}/donation',
-                        extra: (state).masjid,
-                      )
-                      : null,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildContent(MasjidDetailModel masjid) {
-    final header = MasjidHeader(
-      name: masjid.name,
-      bioShort: masjid.bioShort,
-      address: masjid.address,
-      joinedAt: masjid.joinedAt,
-      isFollowing: isFollowing,
-      instagramUrl: masjid.instagramUrl,
-      whatsappUrl: masjid.whatsappUrl,
-      youtubeUrl: masjid.youtubeUrl,
-      masjidSlug: masjid.slug,
-      onFollowToggle: () async {
-        final result = await _showUnfollowDialog(context);
-        if (result != null) {
-          setState(() => isFollowing = result);
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        if (authState.isChecking) {
+          return const Center(child: CircularProgressIndicator());
         }
-      },
-    );
 
-    return selectedTabIndex == 0
-        ? SingleChildScrollView(
+        final isLoggedIn = authState.isLoggedIn;
+
+        return SingleChildScrollView(
           child: Column(
             children: [
-              header,
+              BlocBuilder<MasjidFollowCubit, MasjidFollowState>(
+                builder: (context, followState) {
+                  if (followState.isLoading) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  final isFollowing = followState.isFollowing;
+
+                  return MasjidHeader(
+                    name: widget.masjid.name,
+                    bioShort: widget.masjid.bioShort,
+                    address: widget.masjid.address,
+                    joinedAt: widget.masjid.joinedAt,
+                    isFollowing: isFollowing,
+                    instagramUrl: widget.masjid.instagramUrl,
+                    whatsappUrl: widget.masjid.whatsappUrl,
+                    youtubeUrl: widget.masjid.youtubeUrl,
+                    masjidSlug: widget.masjid.slug,
+                    onFollowToggle: () async {
+                      if (!isLoggedIn) {
+                        _showLoginPrompt(context);
+                        return;
+                      }
+
+                      final followCubit = context.read<MasjidFollowCubit>();
+                      final currentFollowing = followCubit.state.isFollowing;
+
+                      bool? result = true;
+                      if (currentFollowing) {
+                        result = await _showUnfollowDialog(context);
+                      }
+
+                      if (result != null) {
+                        final newStatus = currentFollowing ? false : true;
+                        await followCubit.setFollowApi(newStatus);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              newStatus
+                                  ? "Mengikuti masjid."
+                                  : "Berhenti mengikuti masjid.",
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
               const GapBorderSeparator(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
+              Text(
+                "Status login: ${isLoggedIn ? '✅ Sudah Login' : '❌ Belum Login'}",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              const SizedBox(height: 12),
               _buildTabBar(),
-              const SizedBox(height: 30),
-              _buildTabContent(masjid),
+              const SizedBox(height: 20),
+              _buildTabContent(widget.masjid),
             ],
           ),
-        )
-        : NestedScrollView(
-          headerSliverBuilder:
-              (context, _) => [
-                SliverToBoxAdapter(child: header),
-                const SliverToBoxAdapter(child: GapBorderSeparator()),
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                SliverToBoxAdapter(child: _buildTabBar()),
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
-              ],
-          body: _buildTabContent(masjid),
         );
+      },
+    );
   }
 
   Widget _buildTabBar() {
@@ -182,14 +223,12 @@ class _MasjidScreenState extends State<MasjidScreen> {
             _menuItem(
               Icons.info,
               "Informasi",
-              onTap: () {
-                context.go(
-                  '/masjid/${widget.slug}/information',
-                  extra: masjidData,
-                );
-              },
+              onTap:
+                  () => context.go(
+                    '/masjid/${widget.slug}/information',
+                    extra: masjid,
+                  ),
             ),
-
             _menuItem(
               Icons.receipt_long,
               "Laporan Keuangan",
@@ -233,22 +272,21 @@ class _MasjidScreenState extends State<MasjidScreen> {
           selectedTab == 0
               ? posts
               : posts.where((p) => p['image'] != null).toList();
-      return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          itemCount: filteredPosts.length,
-          itemBuilder: (context, index) {
-            final post = filteredPosts[index];
-            return GestureDetector(
-              onTap: () => context.push('/masjid/detail-posting', extra: post),
-              child:
-                  post['image'] != null
-                      ? PostImageItem(post: post)
-                      : PostTextItem(post: post),
-            );
-          },
-        ),
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: filteredPosts.length,
+        itemBuilder: (context, index) {
+          final post = filteredPosts[index];
+          return GestureDetector(
+            onTap: () => context.push('/masjid/detail-posting', extra: post),
+            child:
+                post['image'] != null
+                    ? PostImageItem(post: post)
+                    : PostTextItem(post: post),
+          );
+        },
       );
     }
   }
@@ -258,7 +296,6 @@ class _MasjidScreenState extends State<MasjidScreen> {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: 40, color: Colors.teal),
@@ -290,6 +327,32 @@ class _MasjidScreenState extends State<MasjidScreen> {
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: const Text("Ya, Unfollow"),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showLoginPrompt(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Login Diperlukan"),
+            content: const Text(
+              "Silakan login terlebih dahulu untuk mengikuti masjid ini.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Batal"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.go('/login');
+                },
+                child: const Text("Login"),
               ),
             ],
           ),

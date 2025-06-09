@@ -7,7 +7,6 @@ import 'package:masjidku/presentation/all/auth/login/model/user_model.dart';
 
 class AuthService {
   final FlutterSecureStorage storage = const FlutterSecureStorage();
-
   late final Dio dio;
 
   AuthService() {
@@ -35,7 +34,6 @@ class AuthService {
               await refreshToken();
               final newToken = await storage.read(key: 'access_token');
               e.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-
               final cloned = await dio.fetch(e.requestOptions);
               return handler.resolve(cloned);
             } catch (err) {
@@ -59,20 +57,14 @@ class AuthService {
         data: {'identifier': email, 'password': password},
       );
 
-      print('[AUTH] ✅ Response login: ${res.data}');
       final data = res.data['data'];
+      print('[AUTH] ✅ Response login: $data');
 
       if (data == null || data['user'] == null) {
         throw Exception("Data user tidak ditemukan");
       }
 
-      await storage.write(key: 'access_token', value: data['access_token']);
-      await storage.write(
-        key: 'refresh_token',
-        value: data['refresh_token_debug'],
-      );
-
-      print('[AUTH] 🗝️ Token disimpan ke storage');
+      await _saveUserSession(data);
       return UserModel.fromJson(data['user']);
     } on DioException catch (e) {
       print('[AUTH] ❌ Error login email: ${e.response?.data}');
@@ -97,19 +89,14 @@ class AuthService {
         data: {'id_token': idToken},
       );
 
-      print('[AUTH] ✅ Response Google login: ${res.data}');
       final data = res.data['data'];
+      print('[AUTH] ✅ Response Google login: $data');
 
       if (data == null || data['user'] == null) {
         throw Exception("Data user tidak ditemukan dari Google");
       }
 
-      await storage.write(key: 'access_token', value: data['access_token']);
-      await storage.write(
-        key: 'refresh_token',
-        value: data['refresh_token_debug'],
-      );
-
+      await _saveUserSession(data);
       return UserModel.fromJson(data['user']);
     } on DioException catch (e) {
       print('[AUTH] ❌ Error login Google: ${e.response?.data}');
@@ -155,28 +142,38 @@ class AuthService {
       await storage.deleteAll();
       print('[AUTH] Semua token dan data login dihapus (logout)');
 
-      // ✅ Tampilkan SnackBar sebagai notifikasi
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Berhasil logout'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-
-        // Navigasi setelah delay agar snackbar sempat tampil
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Berhasil logout')));
         await Future.delayed(const Duration(milliseconds: 400));
       }
     } catch (e) {
       print('[AUTH] Gagal logout: $e');
-
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Logout gagal: $e')));
       }
-
       rethrow;
+    }
+  }
+
+  Future<void> _saveUserSession(Map<String, dynamic> data) async {
+    await storage.write(key: 'access_token', value: data['access_token']);
+    await storage.write(
+      key: 'refresh_token',
+      value: data['refresh_token_debug'],
+    );
+
+    final user = data['user'];
+    if (user != null) {
+      await storage.write(key: 'user_id', value: user['user_id']);
+      await storage.write(key: 'user_name', value: user['user_name']);
+      await storage.write(key: 'user_email', value: user['user_email']);
+      print('[AUTH] 🗝️ User data disimpan ke storage');
+    } else {
+      print('[AUTH] ⚠️ Tidak ada user data untuk disimpan');
     }
   }
 }

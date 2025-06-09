@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/button/main_button.dart';
-import 'package:masjidku/core/utils/auth_utils.dart';
+import 'package:masjidku/core/utils/auth_cubit.dart';
 
 class UpcomingKajianSection extends StatelessWidget {
   const UpcomingKajianSection({super.key});
 
   @override
+
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: AuthUtils.isLoggedIn(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox(); // atau loading indicator
-        }
-
-        final isLoggedIn = snapshot.data!;
-
-        if (!isLoggedIn) {
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (!state.isLoggedIn) {
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Container(
@@ -128,12 +123,11 @@ class UpcomingKajianSection extends StatelessWidget {
             spacing: 8,
             children:
                 tags.map((tag) {
-                  final color =
-                      tag == "Hadir Langsung"
-                          ? Colors.green
-                          : tag == "Hadir Online"
-                          ? Colors.blue
-                          : Colors.teal;
+                  final color = switch (tag) {
+                    "Hadir Langsung" => Colors.green,
+                    "Hadir Online" => Colors.blue,
+                    _ => Colors.teal,
+                  };
                   return Chip(
                     label: Text(tag),
                     backgroundColor: Colors.white,
