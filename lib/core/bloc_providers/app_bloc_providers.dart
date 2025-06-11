@@ -8,10 +8,12 @@ import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart'
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/donation/cubit/masjid_donation_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/event/main/cubit/masjid_event_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/information/cubit/notification_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/profile/main/cubit/masjid_profile_dkm_pengajar_cubit.dart';
 import 'package:masjidku/presentation/all/auth/login/cubit/login_cubit.dart';
 import 'package:masjidku/presentation/all/auth/login/cubit/login_google_cubit.dart';
+import 'package:masjidku/presentation/all/my_activity/main/cubit/user_profile_section_cubit.dart';
 
 class AppBlocProviders extends StatelessWidget {
   final Widget child;
@@ -35,6 +37,10 @@ class AppBlocProviders extends StatelessWidget {
           create: (_) => LoginGoogleCubit(authService: AuthService()),
         ),
         BlocProvider(create: (_) => AuthCubit()..checkLoginStatus()),
+        BlocProvider<EventSessionsCubit>(
+          create: (context) => EventSessionsCubit(),
+        ),
+        BlocProvider(create: (_) => UserProfileCubit()),
       ],
       child: child,
     );

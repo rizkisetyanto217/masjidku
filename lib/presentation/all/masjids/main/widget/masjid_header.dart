@@ -45,7 +45,7 @@ class MasjidHeader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           alignment: Alignment.topLeft,
           child: GestureDetector(
-            onTap: () => context.go('/'),
+            onTap: () => context.pop(),
             child: const Icon(
               Icons.arrow_back_ios_new,
               size: 24,

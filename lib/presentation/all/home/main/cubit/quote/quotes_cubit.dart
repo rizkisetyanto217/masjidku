@@ -8,13 +8,21 @@ class QuotesCubit extends Cubit<QuotesState> {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: AppConfig.baseUrl,
-      connectTimeout: const Duration(seconds: 30), // ⬆️ dinaikkan dari 10
-      receiveTimeout: const Duration(seconds: 30), // ⬆️ dinaikkan dari 10
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
     ),
   );
 
+  bool _hasFetched = false;
+
   QuotesCubit() : super(QuotesInitial());
+
   Future<void> fetchQuotes({int batchNumber = 1}) async {
+    if (_hasFetched) {
+      print('[QuotesCubit] ⚠️ Sudah pernah fetch, abaikan fetch ulang');
+      return;
+    }
+
     print('[QuotesCubit] 📥 Memulai fetch kutipan (batch: $batchNumber)');
     emit(QuotesLoading());
     try {
@@ -25,19 +33,16 @@ class QuotesCubit extends Cubit<QuotesState> {
 
       final statusCode = response.statusCode;
       final body = response.data;
-      print('[QuotesCubit] 📦 Response body: $body');
 
       if (statusCode == 200 && body is List) {
         final List<dynamic> jsonList = body;
         final quotes = jsonList.map((e) => QuoteModel.fromJson(e)).toList();
-        print('[QuotesCubit] ✅ Emit QuotesLoaded (${quotes.length} item)');
+        _hasFetched = true;
         emit(QuotesLoaded(quotes));
       } else {
-        print('[QuotesCubit] ❌ Format data tidak sesuai');
         emit(QuotesError("Format data tidak sesuai"));
       }
     } catch (e) {
-      print('[QuotesCubit] ❌ Gagal memuat kutipan: $e');
       emit(QuotesError("Gagal memuat kutipan: ${e.toString()}"));
     }
   }

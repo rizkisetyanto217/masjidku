@@ -82,7 +82,7 @@ class _TopBar extends StatelessWidget {
             if (isLoggedIn) {
               onLogout();
             } else {
-              context.go('/login');
+              context.push('/login');
             }
           },
           child: Text(
@@ -108,7 +108,7 @@ class _SearchBar extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.go('/search');
+        context.push('/search');
       },
       child: AbsorbPointer(
         child: TextField(

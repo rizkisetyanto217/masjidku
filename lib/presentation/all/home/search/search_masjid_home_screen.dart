@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/model/masjid_model.dart';
@@ -40,10 +39,7 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
-        ),
+        leading: const BackButton(),
         title: const Text("Cari Masjid"),
       ),
       body: Padding(

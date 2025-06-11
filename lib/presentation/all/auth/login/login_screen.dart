@@ -47,10 +47,7 @@ class LoginScreen extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: const Text("Login"),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => context.pop(),
-            ),
+            leading: const BackButton(),
           ),
           body: SafeArea(
             child: SingleChildScrollView(

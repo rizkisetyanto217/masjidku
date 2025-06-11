@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/component/main/home/carousel.dart';
 import 'package:masjidku/component/main/home/header.dart';
@@ -8,7 +7,6 @@ import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
 import 'package:flutter/services.dart';
 import 'package:masjidku/core/constants/quick_access_items.dart';
-import 'package:masjidku/presentation/all/home/main/cubit/quote/quotes_cubit.dart';
 import 'package:masjidku/presentation/all/home/main/widget/qoute_header_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,10 +59,7 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            BlocProvider(
-              create: (_) => QuotesCubit()..fetchQuotes(),
-              child: HeaderSection(quote: const QuoteHeaderWidget()),
-            ),
+            HeaderSection(quote: const QuoteHeaderWidget()),
 
             Stack(
               clipBehavior: Clip.none,

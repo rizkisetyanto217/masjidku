@@ -1,187 +1,188 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:dio/dio.dart';
-
 import 'package:masjidku/component/main/button/small_button.dart';
 import 'package:masjidku/core/constants/app_color.dart';
 import 'package:masjidku/core/utils/auth_cubit.dart';
+import 'package:masjidku/presentation/all/my_activity/main/cubit/user_profile_section_cubit.dart';
+import 'package:masjidku/presentation/all/my_activity/main/cubit/user_profile_section_state.dart';
 
-class UserProfileSection extends StatelessWidget {
+class UserProfileSection extends StatefulWidget {
+  
   const UserProfileSection({super.key});
+
+  @override
+  State<UserProfileSection> createState() => _UserProfileSectionState();
+}
+
+class _UserProfileSectionState extends State<UserProfileSection> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final authState = context.read<AuthCubit>().state;
+    final cubit = context.read<UserProfileCubit>();
+    final token = authState.token;
+
+    if (authState.isLoggedIn && token != null) {
+      if (cubit.state is! UserProfileLoaded ||
+          (cubit.state is UserProfileLoaded &&
+              (cubit.state as UserProfileLoaded).token != token)) {
+        cubit.fetchUserProfile(token);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, state) {
-        if (state.isChecking) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(),
-            ),
-          );
+      builder: (context, authState) {
+        if (authState.isChecking) {
+          return const Center(child: CircularProgressIndicator());
         }
 
-        if (!state.isLoggedIn || state.token == null) {
-          return Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            decoration: BoxDecoration(
-              color: colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Belum Login",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white1,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SmallButton(
-                  text: "Pengaturan",
-                  onPressed: () => context.go('/my-activity/more'),
-                  backgroundColor: Colors.white,
-                  textColor: AppColors.primary,
-                ),
-              ],
-            ),
-          );
+        if (!authState.isLoggedIn || authState.token == null) {
+          return _buildNotLoggedInSection(colorScheme, context);
         }
 
-        // Sudah login, tampilkan data
-        return FutureBuilder<Map<String, dynamic>>(
-          future: _fetchUserData(state.token!),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CircularProgressIndicator(),
-                ),
-              );
+        return BlocBuilder<UserProfileCubit, UserProfileState>(
+          builder: (context, profileState) {
+            if (profileState is UserProfileLoading) {
+              return const Center(child: CircularProgressIndicator());
             }
 
-            if (snapshot.hasError || snapshot.data == null) {
+            if (profileState is UserProfileError) {
               return Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Gagal memuat data user',
+                  'Gagal memuat data user: ${profileState.message}',
                   style: TextStyle(color: colorScheme.error),
                 ),
               );
             }
 
-            final user = snapshot.data!;
-            return Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00796B), Color(0xFF004D40)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.person,
-                          size: 32,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user['user_name'] ?? 'User',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.white1,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              user['email'] ?? '',
-                              style: const TextStyle(color: AppColors.tertiary),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SmallButton(
-                          text: "12 Masjid Saya",
-                          onPressed: () {},
-                          backgroundColor: Colors.white,
-                          textColor: AppColors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: SmallButton(
-                          text: "Pengaturan",
-                          onPressed: () => context.go('/my-activity/more'),
-                          backgroundColor: AppColors.secondary,
-                          textColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
+            if (profileState is UserProfileLoaded) {
+              final user = profileState.user;
+              return _buildProfile(user, context);
+            }
+
+            return const SizedBox.shrink();
           },
         );
       },
     );
   }
 
-  Future<Map<String, dynamic>> _fetchUserData(String token) async {
-    final response = await Dio().get(
-      'https://masjidkubackend-production.up.railway.app/api/u/users/user',
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
+  Widget _buildNotLoggedInSection(
+    ColorScheme colorScheme,
+    BuildContext context,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      decoration: BoxDecoration(
+        color: colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Belum Login",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white1,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SmallButton(
+            text: "Pengaturan",
+            onPressed: () => context.go('/my-activity/more'),
+            backgroundColor: Colors.white,
+            textColor: AppColors.primary,
+          ),
+        ],
+      ),
     );
+  }
 
-    if (response.statusCode == 200 && response.data['data'] != null) {
-      return response.data['data'];
-    } else {
-      throw Exception('Gagal memuat user');
-    }
+  Widget _buildProfile(Map<String, dynamic> user, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF00796B), Color(0xFF004D40)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const CircleAvatar(
+                radius: 28,
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 32, color: AppColors.primary),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user['user_name'] ?? 'User',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.white1,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      user['email'] ?? '',
+                      style: const TextStyle(color: AppColors.tertiary),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: SmallButton(
+                  text: "12 Masjid Saya",
+                  onPressed: () {},
+                  backgroundColor: Colors.white,
+                  textColor: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: SmallButton(
+                  text: "Pengaturan",
+                  onPressed: () => context.go('/my-activity/more'),
+                  backgroundColor: AppColors.secondary,
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

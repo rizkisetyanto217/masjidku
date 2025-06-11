@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
 import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
+import 'package:masjidku/presentation/all/masjids/event/detail/masjid_event_sessions_detail.dart';
+import 'package:masjidku/presentation/all/masjids/event/main/model/masjid_event_sessions_model.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/donation/cubit/masjid_donation_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/information/cubit/notification_cubit.dart';
@@ -309,7 +311,38 @@ final List<GoRoute> userExtraRoutes = [
           ),
         ],
       ),
-      GoRoute(path: 'event', builder: (_, _) => const MasjidEventScreen()),
+      GoRoute(
+        path: 'event',
+        builder: (context, state) {
+          final slug = state.pathParameters['slug']!;
+
+          // ❗ Gunakan try-cast
+          final masjidId = state.extra;
+          if (masjidId is! String) {
+            return const Scaffold(
+              body: Center(child: Text('Masjid ID tidak valid')),
+            );
+          }
+
+          return MasjidEventScreen(slug: slug, masjidId: masjidId);
+        },
+        routes: [
+          GoRoute(
+            path: 'detail',
+            builder: (context, state) {
+              final session = state.extra;
+              if (session is! MasjidEventSessionsModel) {
+                return const Scaffold(
+                  body: Center(child: Text('Sesi acara tidak valid')),
+                );
+              }
+
+              return MasjidEventSessionDetailScreen(session: session);
+            },
+          ),
+        ],
+      ),
+
       GoRoute(
         path: 'certificate',
         builder: (_, __) => const CertificateMasjidScreen(),

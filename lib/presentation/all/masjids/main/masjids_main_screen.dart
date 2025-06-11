@@ -11,6 +11,8 @@ import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_state
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_follow_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/main/model/masjid_detail_profile.dart';
 import 'package:masjidku/presentation/all/masjids/main/widget/masjid_header.dart';
+// Import EventSessionsCubit dan EventSessionsState
+import 'package:masjidku/presentation/all/masjids/event/main/cubit/masjid_event_sessions_cubit.dart';
 
 class MasjidScreen extends StatelessWidget {
   final String slug;
@@ -28,8 +30,28 @@ class MasjidScreen extends StatelessWidget {
               return Center(child: Text(state.message));
             } else if (state is MasjidDetailLoaded) {
               final masjid = state.masjid;
-              return BlocProvider(
-                create: (_) => MasjidFollowCubit(masjidId: masjid.masjidId),
+              print('DEBUG: Masjid ID is: ${masjid.masjidId}');
+              return MultiBlocProvider(
+                // MultiBlocProvider sudah benar
+                providers: [
+                  BlocProvider(
+                    create: (_) => MasjidFollowCubit(masjidId: masjid.masjidId),
+                  ),
+                  BlocProvider<EventSessionsCubit>(
+                    // Pastikan tipenya eksplisit
+                    // Buat instance EventSessionsCubit BARU di sini.
+                    // Ini akan menjadi instance yang akan ditemukan oleh BlocBuilder di _MasjidContent.
+                    create:
+                        (context) =>
+                            EventSessionsCubit()..loadUpcomingEventSessions(
+                              masjidId: masjid.masjidId,
+                              order:
+                                  "terbaru", // Pastikan order juga diteruskan jika diperlukan
+                            ),
+                  ),
+                ],
+                // Pastikan child dari MultiBlocProvider adalah _MasjidContent
+                // Ini memastikan _MasjidContent dan sub-widgetnya memiliki akses ke Cubit yang baru disediakan.
                 child: _MasjidContent(slug: slug, masjid: masjid),
               );
             }
@@ -48,7 +70,7 @@ class MasjidScreen extends StatelessWidget {
                   isReady
                       ? () => context.push(
                         '/masjid/$slug/donation',
-                        extra: (state as MasjidDetailLoaded).masjid,
+                        extra: (state).masjid,
                       )
                       : null,
             ),
@@ -70,7 +92,8 @@ class _MasjidContent extends StatefulWidget {
 
 class _MasjidContentState extends State<_MasjidContent> {
   int selectedTabIndex = 0;
-  int selectedTab = 0;
+  // selectedTab tidak lagi diperlukan karena kita punya 3 tab
+  // int selectedTab = 0;
 
   final List<Map<String, dynamic>> posts = [
     {
@@ -126,8 +149,8 @@ class _MasjidContentState extends State<_MasjidContent> {
                         result = await _showUnfollowDialog(context);
                       }
 
-                      if (result != null) {
-                        final newStatus = currentFollowing ? false : true;
+                      if (result == true || !currentFollowing) {
+                        final newStatus = !currentFollowing;
                         await followCubit.setFollowApi(newStatus);
 
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -224,7 +247,7 @@ class _MasjidContentState extends State<_MasjidContent> {
               Icons.info,
               "Informasi",
               onTap:
-                  () => context.go(
+                  () => context.push(
                     '/masjid/${widget.slug}/information',
                     extra: masjid,
                   ),
@@ -233,33 +256,38 @@ class _MasjidContentState extends State<_MasjidContent> {
               Icons.receipt_long,
               "Laporan Keuangan",
               onTap:
-                  () => context.go('/masjid/${masjid.slug}/financial-report'),
+                  () => context.push('/masjid/${masjid.slug}/financial-report'),
             ),
             _menuItem(
               Icons.people,
               "Absensi & Belajar",
-              onTap: () => context.go('/masjid/${masjid.slug}/absence-study'),
+              onTap: () => context.push('/masjid/${masjid.slug}/absence-study'),
             ),
+            // Hapus Jadwal Kajian dari menu utama karena sekarang jadi tab
             _menuItem(
               Icons.calendar_month,
               "Jadwal Kajian",
-              onTap: () => context.go('/masjid/${masjid.slug}/agenda'),
+              onTap: () => context.push('/masjid/${masjid.slug}/agenda'),
             ),
             _menuItem(
               Icons.event_note_sharp,
               "Acara",
-              onTap: () => context.go('/masjid/${masjid.slug}/event'),
+              onTap:
+                  () => context.push(
+                    '/masjid/${masjid.slug}/event',
+                    extra: masjid.masjidId,
+                  ),
             ),
             _menuItem(
               Icons.workspace_premium,
               "Sertifikat",
-              onTap: () => context.go('/masjid/${masjid.slug}/certificate'),
+              onTap: () => context.push('/masjid/${masjid.slug}/certificate'),
             ),
             _menuItem(
               Icons.person,
               "Profil",
               onTap:
-                  () => context.go(
+                  () => context.push(
                     '/masjid/${masjid.slug}/profile',
                     extra: masjid,
                   ),
@@ -267,11 +295,10 @@ class _MasjidContentState extends State<_MasjidContent> {
           ],
         ),
       );
-    } else {
+    } else if (selectedTabIndex == 1) {
+      // Ini adalah tab "Postingan"
       final filteredPosts =
-          selectedTab == 0
-              ? posts
-              : posts.where((p) => p['image'] != null).toList();
+          posts; // Anda bisa menambahkan logika filter di sini
       return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         shrinkWrap: true,
@@ -289,6 +316,7 @@ class _MasjidContentState extends State<_MasjidContent> {
         },
       );
     }
+    return const SizedBox();
   }
 
   Widget _menuItem(IconData icon, String label, {VoidCallback? onTap}) {
