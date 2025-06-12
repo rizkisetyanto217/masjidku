@@ -48,7 +48,7 @@ class QuickAccessMenuItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
-      onTap: () => GoRouter.of(context).go(route),
+      onTap: () => context.push(route),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_state.dart';
 
-class AbsenceStudyMasjidScreen extends StatefulWidget {
-  const AbsenceStudyMasjidScreen({super.key});
+class MasjidAbsenceStudyScreen extends StatefulWidget {
+  const MasjidAbsenceStudyScreen({super.key});
 
   @override
-  State<AbsenceStudyMasjidScreen> createState() =>
-      _AbsenceStudyMasjidScreenState();
+  State<MasjidAbsenceStudyScreen> createState() =>
+      _MasjidAbsenceStudyScreenState();
 }
 
-class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
-  int selectedTab = 0; // 0: Terbaru, 1: Tema, 2: Bulan
-  final List<String> tabTitles = ['Terbaru', 'Tema', 'Bulan'];
+class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
+  int selectedTab = 0;
   String selectedOrder = 'Terbaru';
 
-  final List<Map<String, dynamic>> items = [
-    {
-      "title": "Rencana Allah yang terbaik",
-      "teacher": "Ustadz Abdullah",
-      "date": "4 Maret 2025, Pukul 10.00 WIB - Selesai",
-      "tags": [
-        _StatusTag("Status Kehadiran", Color(0xFFFFB74D), Colors.black),
-        _StatusTag("Materi & Soal Tersedia", Color(0xFF0097A7), Colors.white),
-      ],
-    },
-    {
-      "title": "Rencana Allah yang terbaik",
-      "teacher": "Ustadz Abdullah",
-      "date": "4 Maret 2025, Pukul 10.00 WIB - Selesai",
-      "tags": [_StatusTag("Hadir Langsung ✅", Color(0xFF4CAF50), Colors.white)],
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final masjidId = GoRouterState.of(context).extra as String?;
+      if (masjidId != null) {
+        print('[🕌 INIT] MasjidID ditemukan: $masjidId');
+        context.read<MasjidLectureSessionsCubit>().fetchAbsenceStudy(
+          masjidId: masjidId,
+        );
+      } else {
+        print('[⚠️ INIT] MasjidID tidak ditemukan di extra');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +51,12 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // TabBar Filter
             _TabSelector(
               selectedIndex: selectedTab,
               onChanged: (index) => setState(() => selectedTab = index),
             ),
-
             const SizedBox(height: 16),
 
-            // Dropdown Urutan
             if (selectedTab == 0) ...[
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -81,31 +79,92 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
                   },
                 ),
               ),
-              // const SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
-            const SizedBox(height: 16),
 
-            // Card List
             Expanded(
               child: IndexedStack(
                 index: selectedTab,
                 children: [
-                  // Tab 0: Terbaru → daftar absensi
-                  ListView.separated(
-                    itemCount: items.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      return _AbsenceCard(
-                        title: item['title'],
-                        teacher: item['teacher'],
-                        date: item['date'],
-                        tags: List<_StatusTag>.from(item['tags']),
-                      );
+                  // ✅ Tab 0: Daftar Absensi (pakai BlocBuilder)
+                  BlocBuilder<
+                    MasjidLectureSessionsCubit,
+                    MasjidLectureSessionsState
+                  >(
+                    builder: (context, state) {
+                      if (state is AbsenceStudyLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is AbsenceStudyLoaded) {
+                        final items = state.items;
+
+                        if (items.isEmpty) {
+                          return const Center(child: Text("Belum ada data."));
+                        }
+
+                        return ListView.separated(
+                          itemCount: items.length,
+                          separatorBuilder:
+                              (_, __) => const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+
+                            // Buat daftar tag
+                            final List<Widget> tags = [];
+
+                            // Status kehadiran
+                            if (item.attendanceStatusText != null) {
+                              tags.add(
+                                _StatusTag(
+                                  item.attendanceStatusText!,
+                                  Colors.green.shade600,
+                                  Colors.white,
+                                ),
+                              );
+                            } else {
+                              tags.add(
+                                _StatusTag(
+                                  "Status Kehadiran -",
+                                  Colors.amber.shade700,
+                                  Colors.black,
+                                ),
+                              );
+                            }
+
+                            // Nilai (grade)
+                            if (item.userGradeResult != null) {
+                              final grade = item.userGradeResult!;
+                              final color =
+                                  grade >= 80
+                                      ? Colors.blue.shade700
+                                      : grade >= 60
+                                      ? Colors.orange.shade700
+                                      : Colors.red.shade600;
+
+                              tags.add(
+                                _StatusTag(
+                                  "Nilai: $grade",
+                                  color,
+                                  Colors.white,
+                                ),
+                              );
+                            }
+
+                            return _AbsenceCard(
+                              title: item.title,
+                              teacher: item.teacherName ?? "-",
+                              date: item.sessionTimeFormatted,
+                              tags: tags,
+                            );
+                          },
+                        );
+                      } else if (state is AbsenceStudyError) {
+                        return Center(child: Text(state.message));
+                      } else {
+                        return const SizedBox();
+                      }
                     },
                   ),
 
-                  // Tab 1: Tema
                   // Tab 1: Tema
                   ListView(
                     children: [
@@ -132,7 +191,6 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
                   ),
 
                   // Tab 2: Bulan
-                  // Tab 2: Bulan
                   ListView(
                     children: [
                       const Padding(
@@ -142,9 +200,7 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Color(
-                              0xFF00796B,
-                            ), // Warna Primary dari Figma
+                            color: Color(0xFF00796B),
                           ),
                         ),
                       ),
@@ -176,26 +232,26 @@ class _AbsenceStudyMasjidScreenState extends State<AbsenceStudyMasjidScreen> {
       ),
     );
   }
-
-  // IconData _tabIcon(int index) {
-  //   switch (index) {
-  //     case 0:
-  //       return Icons.arrow_outward_rounded;
-  //     case 1:
-  //       return Icons.bookmark_border;
-  //     case 2:
-  //       return Icons.calendar_today_outlined;
-  //     default:
-  //       return Icons.circle;
-  //   }
-  // }
 }
+
+// IconData _tabIcon(int index) {
+//   switch (index) {
+//     case 0:
+//       return Icons.arrow_outward_rounded;
+//     case 1:
+//       return Icons.bookmark_border;
+//     case 2:
+//       return Icons.calendar_today_outlined;
+//     default:
+//       return Icons.circle;
+//   }
+// }
 
 class _AbsenceCard extends StatelessWidget {
   final String title;
   final String teacher;
   final String date;
-  final List<_StatusTag> tags;
+  final List<Widget> tags;
 
   const _AbsenceCard({
     required this.title,

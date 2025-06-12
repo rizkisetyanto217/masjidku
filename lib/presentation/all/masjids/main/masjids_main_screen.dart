@@ -6,17 +6,19 @@ import 'package:masjidku/component/main/button/main_button.dart';
 import 'package:masjidku/component/main/posting/post_image_item.dart';
 import 'package:masjidku/component/main/posting/post_text_item.dart';
 import 'package:masjidku/core/utils/auth_cubit.dart';
+import 'package:masjidku/presentation/all/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_state.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_follow_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/main/model/masjid_detail_profile.dart';
 import 'package:masjidku/presentation/all/masjids/main/widget/masjid_header.dart';
-// Import EventSessionsCubit dan EventSessionsState
 import 'package:masjidku/presentation/all/masjids/event/main/cubit/masjid_event_sessions_cubit.dart';
 
 class MasjidScreen extends StatelessWidget {
   final String slug;
-  const MasjidScreen({super.key, required this.slug});
+  final MasjidDetailModel? initialMasjid;
+
+  const MasjidScreen({super.key, required this.slug, this.initialMasjid});
 
   @override
   Widget build(BuildContext context) {
@@ -30,29 +32,29 @@ class MasjidScreen extends StatelessWidget {
               return Center(child: Text(state.message));
             } else if (state is MasjidDetailLoaded) {
               final masjid = state.masjid;
-              print('DEBUG: Masjid ID is: ${masjid.masjidId}');
-              return MultiBlocProvider(
-                // MultiBlocProvider sudah benar
-                providers: [
-                  BlocProvider(
-                    create: (_) => MasjidFollowCubit(masjidId: masjid.masjidId),
-                  ),
-                  BlocProvider<EventSessionsCubit>(
-                    // Pastikan tipenya eksplisit
-                    // Buat instance EventSessionsCubit BARU di sini.
-                    // Ini akan menjadi instance yang akan ditemukan oleh BlocBuilder di _MasjidContent.
-                    create:
-                        (context) =>
-                            EventSessionsCubit()..loadUpcomingEventSessions(
-                              masjidId: masjid.masjidId,
-                              order:
-                                  "terbaru", // Pastikan order juga diteruskan jika diperlukan
-                            ),
-                  ),
-                ],
-                // Pastikan child dari MultiBlocProvider adalah _MasjidContent
-                // Ini memastikan _MasjidContent dan sub-widgetnya memiliki akses ke Cubit yang baru disediakan.
-                child: _MasjidContent(slug: slug, masjid: masjid),
+              return Builder(
+                builder: (context) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<SelectedMasjidCubit>(
+                        create: (_) => SelectedMasjidCubit(),
+                      ),
+                      BlocProvider<MasjidFollowCubit>(
+                        create:
+                            (_) => MasjidFollowCubit(masjidId: masjid.masjidId),
+                      ),
+                      BlocProvider<EventSessionsCubit>(
+                        create:
+                            (_) =>
+                                EventSessionsCubit()..loadUpcomingEventSessions(
+                                  masjidId: masjid.masjidId,
+                                  order: "terbaru",
+                                ),
+                      ),
+                    ],
+                    child: _MasjidContent(slug: slug, masjid: masjid),
+                  );
+                },
               );
             }
             return const SizedBox();
@@ -92,8 +94,6 @@ class _MasjidContent extends StatefulWidget {
 
 class _MasjidContentState extends State<_MasjidContent> {
   int selectedTabIndex = 0;
-  // selectedTab tidak lagi diperlukan karena kita punya 3 tab
-  // int selectedTab = 0;
 
   final List<Map<String, dynamic>> posts = [
     {
@@ -103,6 +103,12 @@ class _MasjidContentState extends State<_MasjidContent> {
       "image": null,
     },
   ];
+
+  @override
+  void dispose() {
+    context.read<SelectedMasjidCubit>().clearMasjid();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,9 +267,13 @@ class _MasjidContentState extends State<_MasjidContent> {
             _menuItem(
               Icons.people,
               "Absensi & Belajar",
-              onTap: () => context.push('/masjid/${masjid.slug}/absence-study'),
+              onTap:
+                  () => context.push(
+                    '/masjid/${masjid.slug}/absence-study',
+                    extra: masjid.masjidId,
+                  ),
             ),
-            // Hapus Jadwal Kajian dari menu utama karena sekarang jadi tab
+
             _menuItem(
               Icons.calendar_month,
               "Jadwal Kajian",
@@ -296,9 +306,7 @@ class _MasjidContentState extends State<_MasjidContent> {
         ),
       );
     } else if (selectedTabIndex == 1) {
-      // Ini adalah tab "Postingan"
-      final filteredPosts =
-          posts; // Anda bisa menambahkan logika filter di sini
+      final filteredPosts = posts;
       return ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         shrinkWrap: true,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/core/utils/auth_cubit.dart';
 import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
-import 'package:masjidku/presentation/all/my_activity/main/cubit/user_profile_section_state.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/upcoming_kajian.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/user_info_section.dart';
 import 'package:masjidku/presentation/all/my_activity/main/widget/user_profile_section.dart';

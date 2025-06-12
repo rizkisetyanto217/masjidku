@@ -56,7 +56,7 @@ class MasjidTeacherScreeen extends StatelessWidget {
                     item.name,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  subtitle: Text(item.description ?? 'Pengajar Masjid'),
+                  subtitle: Text(item.description),
                   contentPadding: EdgeInsets.zero,
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {

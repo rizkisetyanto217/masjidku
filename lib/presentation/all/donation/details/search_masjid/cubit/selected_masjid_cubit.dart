@@ -10,4 +10,6 @@ class SelectedMasjidCubit extends Cubit<Map<String, String>?> {
   void clearMasjid() {
     emit(null);
   }
+
+  void setMasjidId(String masjidId) {}
 }

@@ -11,7 +11,6 @@ class DkmProfilMasjidScreen extends StatefulWidget {
 class _DkmProfilMasjidScreenState extends State<DkmProfilMasjidScreen> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(

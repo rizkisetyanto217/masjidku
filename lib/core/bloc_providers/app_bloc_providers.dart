@@ -7,6 +7,7 @@ import 'package:masjidku/presentation/all/home/main/cubit/quote/quotes_cubit.dar
 import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/donation/cubit/masjid_donation_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/event/main/cubit/masjid_event_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/information/cubit/notification_cubit.dart';
@@ -41,6 +42,7 @@ class AppBlocProviders extends StatelessWidget {
           create: (context) => EventSessionsCubit(),
         ),
         BlocProvider(create: (_) => UserProfileCubit()),
+        BlocProvider(create: (_) => MasjidLectureSessionsCubit()),
       ],
       child: child,
     );

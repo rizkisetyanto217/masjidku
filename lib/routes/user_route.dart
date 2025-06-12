@@ -217,7 +217,7 @@ final List<GoRoute> userExtraRoutes = [
       ),
       GoRoute(
         path: 'absence-study',
-        builder: (_, __) => const AbsenceStudyMasjidScreen(),
+        builder: (_, __) => const MasjidAbsenceStudyScreen(),
         routes: [
           GoRoute(
             path: 'thema-study',

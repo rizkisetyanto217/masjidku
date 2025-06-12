@@ -11,7 +11,7 @@ import 'package:masjidku/presentation/all/home/main/widget/qoute_header_widget.d
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MasjidkuMain extends StatefulWidget {
-  const MasjidkuMain({Key? key}) : super(key: key);
+  const MasjidkuMain({super.key});
 
   @override
   State<MasjidkuMain> createState() => _MasjidkuMainState();
