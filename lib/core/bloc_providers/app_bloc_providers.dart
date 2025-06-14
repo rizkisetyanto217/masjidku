@@ -8,6 +8,9 @@ import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart'
 import 'package:masjidku/core/themes/theme_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/study/main/cubit/material_asset_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/main/cubit/thema_lectures_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/quiz/cubit/thema_study_quiz_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/donation/cubit/masjid_donation_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/event/main/cubit/masjid_event_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/information/cubit/notification_cubit.dart';
@@ -43,6 +46,9 @@ class AppBlocProviders extends StatelessWidget {
         ),
         BlocProvider(create: (_) => UserProfileCubit()),
         BlocProvider(create: (_) => MasjidLectureSessionsCubit()),
+        BlocProvider(create: (_) => ThemeLectureCubit()),
+        BlocProvider(create: (_) => LectureSessionMaterialAssetCubit()),
+        BlocProvider(create: (_) => LectureQuizCubit()),
       ],
       child: child,
     );

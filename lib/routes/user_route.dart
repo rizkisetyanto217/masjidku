@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
 import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/model/masjid_lectures_model.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/quiz/cubit/thema_study_quiz_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/video/main/cubit/video_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/event/detail/masjid_event_sessions_detail.dart';
 import 'package:masjidku/presentation/all/masjids/event/main/model/masjid_event_sessions_model.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
@@ -221,16 +224,50 @@ final List<GoRoute> userExtraRoutes = [
         routes: [
           GoRoute(
             path: 'thema-study',
-            builder: (_, __) => const ThemaStudyScreen(),
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>;
+              return ThemaStudyScreen(
+                data: extra['data'],
+                masjidSlug: extra['masjidSlug'],
+              );
+            },
             routes: [
-              GoRoute(path: 'quiz', builder: (_, __) => const QuizScreen()),
+              GoRoute(
+                path: 'quiz',
+                builder: (context, state) {
+                  final extra = state.extra as Map<String, dynamic>?;
+
+                  final lectureId = extra?['lectureId'] as String?;
+                  final lecture = extra?['lecture'];
+                  final masjidId =
+                      (lecture is MasjidLectureModel) ? lecture.masjidId : null;
+
+                  if (lectureId != null && masjidId != null) {
+                    return BlocProvider(
+                      create: (_) => LectureQuizCubit(),
+                      child: ThemaStudyQuizScreen(
+                        lectureId: lectureId,
+                      ),
+                    );
+                  }
+
+                  return const Scaffold(
+                    body: Center(
+                      child: Text('Parameter tidak lengkap untuk halaman kuis'),
+                    ),
+                  );
+                },
+              ),
+
               GoRoute(
                 path: 'faq',
                 builder: (_, __) => const DetailThemaStudyFaqScreen(),
               ),
               GoRoute(
                 path: 'information',
-                builder: (_, __) => const DetailThemaStudyInformationScreen(),
+                builder:
+                    (context, state) =>
+                        const DetailThemaStudyInformationScreen(),
               ),
               GoRoute(
                 path: 'transcription',
@@ -254,14 +291,34 @@ final List<GoRoute> userExtraRoutes = [
                 builder: (_, __) => const DetailThemaStudySummaryScreen(),
               ),
               GoRoute(
-                path: 'video',
-                builder: (_, __) => const ThemaVideoScreen(),
+                path: 'video/:lectureId',
+                builder: (context, state) {
+                  final lectureId = state.pathParameters['lectureId']!;
+                  return BlocProvider(
+                    create: (_) => VideoCubit(),
+                    child: ThemaVideoScreen(lectureId: lectureId),
+                  );
+                },
               ),
             ],
           ),
           GoRoute(
-            path: 'study',
-            builder: (_, __) => const StudyScreen(),
+            path: 'study/:lectureSessionId',
+            builder: (context, state) {
+              final lectureSessionId =
+                  state.pathParameters['lectureSessionId']!;
+              final masjidSlug =
+                  state.extra is Map<String, dynamic>
+                      ? (state.extra as Map<String, dynamic>)['masjidSlug'] ??
+                          'unknown'
+                      : 'unknown';
+
+              return MasjidStudyScreen(
+                lectureSessionId: lectureSessionId,
+                masjidSlug: masjidSlug,
+                extra: state.extra,
+              );
+            },
             routes: [
               GoRoute(
                 path: 'information',

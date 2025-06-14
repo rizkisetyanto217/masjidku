@@ -40,7 +40,7 @@ export '../presentation/all/masjids/agenda/detail_agenda/detail_agenda_screen.da
 export '../presentation/all/masjids/absence_study/thema/main/thema_screen.dart';
 export '../presentation/all/masjids/event/main/masjid_event_screen.dart';
 
-export '../presentation/all/masjids/absence_study/thema/quiz/main/quiz_screen.dart';
+export '../presentation/all/masjids/absence_study/thema/quiz/main/thema_study_quiz_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/faq/main/thema_study_faq_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/information/main/thema_study_information_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/transciption/main/thema_study_transcription_screen.dart';
@@ -63,13 +63,13 @@ export '../presentation/all/masjids/absence_study/study/quiz/details/study_quiz_
 //? My Activity
 export '../presentation/all/my_activity/main/my_activity_screen.dart';
 export '../presentation/all/my_activity/more/main/my_activity_more_screen.dart';
-export '../presentation/all/my_activity/more/details/general_profile/main/umum_profile_screen.dart';
-export '../presentation/all/my_activity/more/details/other_faq/main/other_faq_screen.dart';
-export '../presentation/all/my_activity/more/details/other_suggestion_feedback/main/other_suggestion_feedback_screen.dart';
-export '../presentation/all/my_activity/more/details/other_term/main/other_term_screen.dart';
-export '../presentation/all/my_activity/more/details/general_appearance/main/general_appreance_screen.dart';
-export '../presentation/all/my_activity/more/details/general_theme/main/general_theme_screen.dart';
-export '../presentation/all/my_activity/more/details/general_certificate/main/general_certificate_screen.dart';
+export '../presentation/all/my_activity/more/general_profile/main/umum_profile_screen.dart';
+export '../presentation/all/my_activity/more/other_faq/main/other_faq_screen.dart';
+export '../presentation/all/my_activity/more/other_suggestion_feedback/main/other_suggestion_feedback_screen.dart';
+export '../presentation/all/my_activity/more/main/other_term_screen.dart';
+export '../presentation/all/my_activity/more/general_appearance/main/general_appreance_screen.dart';
+export '../presentation/all/my_activity/more/general_theme/main/general_theme_screen.dart';
+export '../presentation/all/my_activity/more/general_certificate/main/general_certificate_screen.dart';
 export '../presentation/all/donation/details/donation_history/main/donation_history_screen.dart';
 export '../presentation/all/my_activity/lesson_history/main/my_activity_lesson_history_screen.dart';
 export '../presentation/all/my_activity/stats/main/stats_screen.dart';

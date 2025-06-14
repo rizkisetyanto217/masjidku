@@ -20,9 +20,7 @@ class _DetailThemaStudySuggestionUserScreenState
       appBar: AppBar(
         title: const Text("Saran Peserta"),
         leading: const BackButton(),
-        backgroundColor: Colors.white,
         elevation: 0,
-        foregroundColor: Colors.black87,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -31,7 +29,6 @@ class _DetailThemaStudySuggestionUserScreenState
           children: [
             const Text(
               "Pendapat yang berupa ide, rekomendasi atau langkah kedepan. Contohnya penambahan fitur atau materi tertentu.",
-              style: TextStyle(color: Colors.black87),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -82,7 +79,6 @@ class _DetailThemaStudySuggestionUserScreenState
         child: MainButton(
           label: "Kirim",
           onPressed: () {
-            // TODO: kirim ke backend
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Terima kasih atas saran Anda!")),
             );

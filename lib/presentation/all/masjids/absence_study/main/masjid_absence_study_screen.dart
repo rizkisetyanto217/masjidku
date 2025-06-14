@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_state.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lectures_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lectures_state.dart';
 
 class MasjidAbsenceStudyScreen extends StatefulWidget {
   const MasjidAbsenceStudyScreen({super.key});
@@ -15,20 +17,30 @@ class MasjidAbsenceStudyScreen extends StatefulWidget {
 class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
   int selectedTab = 0;
   String selectedOrder = 'Terbaru';
+  late String? masjidId;
+  late String? masjidSlug;
 
   @override
   void initState() {
     super.initState();
 
     Future.microtask(() {
-      final masjidId = GoRouterState.of(context).extra as String?;
-      if (masjidId != null) {
-        print('[🕌 INIT] MasjidID ditemukan: $masjidId');
-        context.read<MasjidLectureSessionsCubit>().fetchAbsenceStudy(
-          masjidId: masjidId,
-        );
+      final extra = GoRouterState.of(context).extra;
+
+      if (extra is Map) {
+        masjidId = extra['masjidId'] as String?;
+        masjidSlug = extra['masjidSlug'] as String?;
+
+        if (masjidId != null) {
+          print('[🕌 INIT] MasjidID ditemukan: $masjidId');
+          context.read<MasjidLectureSessionsCubit>().fetchAbsenceStudy(
+            masjidId: masjidId!,
+          );
+        } else {
+          print('[⚠️ INIT] MasjidID tidak ditemukan di extra');
+        }
       } else {
-        print('[⚠️ INIT] MasjidID tidak ditemukan di extra');
+        print('[⚠️ INIT] Extra bukan Map atau tidak ditemukan');
       }
     });
   }
@@ -154,6 +166,15 @@ class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
                               teacher: item.teacherName ?? "-",
                               date: item.sessionTimeFormatted,
                               tags: tags,
+                              onTap: () {
+                                context.push(
+                                  '/masjid/$masjidSlug/absence-study/study/${item.id}',
+                                  extra: {
+                                    'session': item,
+                                    'masjidSlug': masjidSlug,
+                                  },
+                                );
+                              },
                             );
                           },
                         );
@@ -166,28 +187,90 @@ class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
                   ),
 
                   // Tab 1: Tema
-                  ListView(
-                    children: [
-                      _TemaProgressCard(
-                        title: "Kajian Aqidah",
-                        progress: 10,
-                        total: 15,
-                      ),
-                      const SizedBox(height: 12),
-                      _TemaListCard(
-                        title: "Kajian Fiqh",
-                        subtitle: "12 Kajian tatap muka",
-                        onTap:
-                            () =>
-                                context.go('/masjid/absence-study/thema-study'),
-                      ),
-                      const SizedBox(height: 12),
-                      _TemaListCard(
-                        title: "Kajian Tematik",
-                        subtitle: "12 Kajian tatap online",
-                        onTap: () {},
-                      ),
-                    ],
+                  BlocProvider(
+                    create: (_) {
+                      final cubit = MasjidLecturesCubit();
+                      final masjidId =
+                          GoRouterState.of(context).extra
+                              as Map<String, dynamic>? ??
+                          {};
+                      cubit.fetchUserLectures(masjidId: masjidId['masjidId']);
+                      return cubit;
+                    },
+                    child: BlocBuilder<
+                      MasjidLecturesCubit,
+                      MasjidLecturesState
+                    >(
+                      builder: (context, state) {
+                        if (state is MasjidLecturesLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (state is MasjidLecturesError) {
+                          return Center(child: Text(state.message));
+                        }
+
+                        if (state is MasjidLecturesLoaded) {
+                          final lectures = state.lectures;
+
+                          if (lectures.isEmpty) {
+                            return const Center(
+                              child: Text('Belum ada kajian.'),
+                            );
+                          }
+
+                          return ListView.separated(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            itemCount: lectures.length,
+                            separatorBuilder:
+                                (_, __) => const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final lecture = lectures[index];
+
+                              final hasProgress =
+                                  lecture.completeTotalLectureSessions !=
+                                      null &&
+                                  lecture.totalLectureSessions > 0;
+
+                              return hasProgress
+                                  ? _TemaProgressCard(
+                                    title: lecture.lectureTitle,
+                                    progress:
+                                        lecture.completeTotalLectureSessions!,
+                                    total: lecture.totalLectureSessions,
+                                    onTap: () {
+                                      context.push(
+                                        '/masjid/$masjidSlug/absence-study/thema-study',
+                                         extra: {
+                                          'data': lecture, // MasjidLectureModel
+                                          'masjidSlug': masjidSlug,
+                                        },
+                                      );
+                                    },
+                                  )
+                                  : _TemaListCard(
+                                    title: lecture.lectureTitle,
+                                    subtitle:
+                                        "${lecture.totalLectureSessions} Kajian berlangsung",
+                                    onTap: () {
+                                      context.push(
+                                        '/masjid/$masjidSlug/absence-study/thema-study',
+                                        extra: {
+                                          'data': lecture, // MasjidLectureModel
+                                          'masjidSlug': masjidSlug,
+                                        },
+                                      );
+                                    },
+                                  );
+                            },
+                          );
+                        }
+
+                        return const SizedBox(); // Fallback jika tidak match
+                      },
+                    ),
                   ),
 
                   // Tab 2: Bulan
@@ -252,43 +335,48 @@ class _AbsenceCard extends StatelessWidget {
   final String teacher;
   final String date;
   final List<Widget> tags;
+  final VoidCallback? onTap;
 
   const _AbsenceCard({
     required this.title,
     required this.teacher,
     required this.date,
     required this.tags,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFDDDDDD)),
-        borderRadius: BorderRadius.circular(8),
-        // color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
-          const SizedBox(height: 4),
-          Text(teacher, style: const TextStyle(color: Colors.grey)),
-          const SizedBox(height: 6),
-          Row(
-            children: [
-              const Icon(Icons.circle, size: 8, color: Colors.black),
-              const SizedBox(width: 6),
-              Text(date, style: const TextStyle(fontSize: 12)),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Wrap(spacing: 8, runSpacing: 8, children: tags),
-        ],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFDDDDDD)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            const SizedBox(height: 4),
+            Text(teacher, style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                const Icon(Icons.circle, size: 8, color: Colors.black),
+                const SizedBox(width: 6),
+                Text(date, style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Wrap(spacing: 8, runSpacing: 8, children: tags),
+          ],
+        ),
       ),
     );
   }
@@ -381,49 +469,54 @@ class _TemaProgressCard extends StatelessWidget {
   final String title;
   final int progress;
   final int total;
+  final VoidCallback? onTap;
 
   const _TemaProgressCard({
     required this.title,
     required this.progress,
     required this.total,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final percent = progress / total;
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
-          const SizedBox(height: 10),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: LinearProgressIndicator(
-              value: percent,
-              minHeight: 10,
-              // backgroundColor: Colors.grey.shade200,
-              color: const Color(0xFF4CAF50),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
-          ),
-          const SizedBox(height: 6),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              "$progress/$total",
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: LinearProgressIndicator(
+                value: percent,
+                minHeight: 10,
+                color: const Color(0xFF4CAF50),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 6),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                "$progress/$total",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

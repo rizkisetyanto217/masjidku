@@ -102,7 +102,7 @@ class _UserProfileSectionState extends State<UserProfileSection> {
           const SizedBox(height: 12),
           SmallButton(
             text: "Pengaturan",
-            onPressed: () => context.go('/my-activity/more'),
+            onPressed: () => context.push('/my-activity/more'),
             backgroundColor: Colors.white,
             textColor: AppColors.primary,
           ),
@@ -174,7 +174,7 @@ class _UserProfileSectionState extends State<UserProfileSection> {
               Expanded(
                 child: SmallButton(
                   text: "Pengaturan",
-                  onPressed: () => context.go('/my-activity/more'),
+                  onPressed: () => context.push('/my-activity/more'),
                   backgroundColor: AppColors.secondary,
                   textColor: Colors.white,
                 ),

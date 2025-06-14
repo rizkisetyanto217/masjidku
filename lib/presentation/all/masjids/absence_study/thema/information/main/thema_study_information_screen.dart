@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/main/model/masjid_lectures_model.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/widgets/info_item_component.dart';
 
-class DetailThemaStudyInformationScreen extends StatefulWidget {
+class DetailThemaStudyInformationScreen extends StatelessWidget {
   const DetailThemaStudyInformationScreen({super.key});
 
   @override
-  State<DetailThemaStudyInformationScreen> createState() =>
-      _DetailThemaStudyInformationScreenState();
-}
-
-class _DetailThemaStudyInformationScreenState
-    extends State<DetailThemaStudyInformationScreen> {
-  @override
   Widget build(BuildContext context) {
+    // Terima data dari route
+    final extra = GoRouterState.of(context).extra as Map<String, dynamic>?;
+    final MasjidLectureModel? lecture = extra?['lecture'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Informasi"),
@@ -24,10 +23,16 @@ class _DetailThemaStudyInformationScreenState
           SizedBox(width: 8),
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 16),
-        child: InfoSection(),
-      ),
+      body:
+          lecture == null
+              ? const Center(child: Text("Data tidak tersedia."))
+              : Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16,
+                ),
+                child: InfoSection(lecture: lecture),
+              ),
     );
   }
 }

@@ -270,10 +270,12 @@ class _MasjidContentState extends State<_MasjidContent> {
               onTap:
                   () => context.push(
                     '/masjid/${masjid.slug}/absence-study',
-                    extra: masjid.masjidId,
+                    extra: {
+                      'masjidId': masjid.masjidId,
+                      'masjidSlug': masjid.slug,
+                    },
                   ),
             ),
-
             _menuItem(
               Icons.calendar_month,
               "Jadwal Kajian",

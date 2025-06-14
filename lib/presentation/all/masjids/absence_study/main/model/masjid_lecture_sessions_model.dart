@@ -52,6 +52,7 @@ class MasjidLectureSessionsModel {
   });
 
   factory MasjidLectureSessionsModel.fromJson(Map<String, dynamic> json) {
+    print('🔍 JSON Keys: ${json.keys}');
     print('==== [🧪 DEBUG JSON MASUK] ====');
     print('📌 ID         : ${json['lecture_session_id']}');
     print('📘 Judul      : ${json['lecture_session_title']}');
@@ -68,8 +69,24 @@ class MasjidLectureSessionsModel {
       description: json['lecture_session_description'] ?? '',
       teacherId: json['lecture_session_teacher_id'] ?? '',
       teacherName: json['lecture_session_teacher_name']?.toString(),
-      startTime: DateTime.parse(json['lecture_session_start_time']),
-      endTime: DateTime.parse(json['lecture_session_end_time']),
+      startTime:
+          json['lecture_session_start_time'] != null
+              ? DateTime.tryParse(json['lecture_session_start_time']) ??
+                  DateTime.now()
+              : DateTime.now(),
+
+      endTime:
+          json['lecture_session_end_time'] != null
+              ? DateTime.tryParse(json['lecture_session_end_time']) ??
+                  DateTime.now()
+              : DateTime.now(),
+
+      createdAt:
+          json['lecture_session_created_at'] != null
+              ? DateTime.tryParse(json['lecture_session_created_at']) ??
+                  DateTime.now()
+              : DateTime.now(),
+
       place: json['lecture_session_place'] ?? '',
       lectureId: json['lecture_session_lecture_id'] ?? '',
       masjidId: json['lecture_session_masjid_id'] ?? '',
@@ -83,7 +100,6 @@ class MasjidLectureSessionsModel {
           json['lecture_session_payment_deadline'] != null
               ? DateTime.tryParse(json['lecture_session_payment_deadline'])
               : null,
-      createdAt: DateTime.parse(json['lecture_session_created_at']),
       userAttendanceStatus: json['user_lecture_session_attendance_status'],
       userGradeResult: json['user_lecture_session_grade_result'],
       userIsRegistered: json['user_lecture_session_is_registered'],
@@ -118,4 +134,24 @@ class MasjidLectureSessionsModel {
   }
 
   bool get hasQuestions => true; // Placeholder, bisa diubah tergantung data
+
+  /// Menandakan bahwa peserta sudah membayar tapi belum ikut kuis
+  bool get hasPaidButNotTakenQuiz {
+    return (userHasPaid ?? false) && userGradeResult == null;
+  }
+
+  /// Menandakan bahwa peserta sudah daftar tapi belum bayar
+  bool get isRegisteredButNotPaid {
+    return (userIsRegistered ?? false) && !(userHasPaid ?? false);
+  }
+
+  /// Menandakan bahwa sesi ini sudah berakhir
+  bool get isSessionOver {
+    return endTime.isBefore(DateTime.now());
+  }
+
+  /// Menandakan bahwa peserta sudah ikut dan menyelesaikan
+  bool get isCompleted {
+    return (userGradeResult != null) && ((userAttendanceStatus ?? -1) != -1);
+  }
 }

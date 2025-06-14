@@ -6,6 +6,7 @@ import 'package:masjidku/component/main/home/player_info_card.dart';
 import 'package:masjidku/component/main/home/quict_access_menu.dart';
 import 'package:masjidku/component/main/home/about_section.dart';
 import 'package:flutter/services.dart';
+import 'package:masjidku/core/constants/app_color.dart';
 import 'package:masjidku/core/constants/quick_access_items.dart';
 import 'package:masjidku/presentation/all/home/main/widget/qoute_header_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,6 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
         child: Column(
           children: [
             HeaderSection(quote: const QuoteHeaderWidget()),
-
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -134,8 +134,8 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
       extendBodyBehindAppBar: true,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-          statusBarColor:
-              Colors.transparent, // transparan agar warna header kelihatan
+          statusBarColor: AppColors.primary,
+// transparan agar warna header kelihatan
           statusBarIconBrightness: Brightness.light, // biar icon putih
         ),
         child: _buildDashboardContent(),
