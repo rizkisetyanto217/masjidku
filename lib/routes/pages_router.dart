@@ -28,7 +28,7 @@ export '../presentation/all/masjids/information/main/masjid_information_screen.d
 export '../presentation/all/masjids/financial_report/main/masjid_financial_report_screen.dart';
 export '../presentation/all/masjids/financial_report/details/masjid_financial_report_detail_screen.dart';
 export '../presentation/all/masjids/absence_study/main/masjid_absence_study_screen.dart';
-export '../presentation/all/masjids/agenda/main/masjid_agenda_screen.dart';
+export '../presentation/all/masjids/agenda_kajian/main/masjid_agenda_screen.dart';
 export '../presentation/all/masjids/certificate/main/masjid_certificate_screen.dart';
 
 export '../presentation/all/masjids/profile/profile/profile_screen.dart';
@@ -36,18 +36,18 @@ export '../presentation/all/masjids/profile/masjid_dkm_teacher/masjid_dkm_screen
 export '../presentation/all/masjids/profile/masjid_dkm_teacher/masjid_teacher_screeen.dart';
 export '../presentation/all/masjids/profile/speech/main/speech_screen.dart';
 export '../presentation/all/masjids/main/masjids_detail_posting_screen.dart';
-export '../presentation/all/masjids/agenda/detail_agenda/detail_agenda_screen.dart';
+export '../presentation/all/masjids/agenda_kajian/detail_agenda/detail_agenda_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/main/thema_screen.dart';
 export '../presentation/all/masjids/event/main/masjid_event_screen.dart';
 
 export '../presentation/all/masjids/absence_study/thema/quiz/main/thema_study_quiz_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/faq/main/thema_study_faq_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/information/main/thema_study_information_screen.dart';
-export '../presentation/all/masjids/absence_study/thema/transciption/main/thema_study_transcription_screen.dart';
+export '../presentation/all/masjids/absence_study/thema/transciption/thema_study_transcription_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/note_user/main/thema_study_note_user_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/stats_user/main/thema_study_stats_user_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/suggestion_user/main/thema_study_suggestion_user_screen.dart';
-export '../presentation/all/masjids/absence_study/thema/summary/main/thema_study_summary_screen.dart';
+export '../presentation/all/masjids/absence_study/thema/summary/thema_study_summary_screen.dart';
 export '../presentation/all/masjids/absence_study/thema/video/main/video_screen.dart';
 
 export '../presentation/all/masjids/absence_study/study/main/study_screen.dart';

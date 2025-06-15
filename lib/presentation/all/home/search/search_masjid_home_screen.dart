@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
+import 'package:masjidku/presentation/all/home/search/cubit/masjid_followed_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/model/masjid_model.dart';
 import 'package:masjidku/presentation/all/home/search/widget/masjid_list_section.dart';
 
@@ -17,19 +19,11 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
 
   final List<String> tabs = ["Cari Masjid", "Masjid Saya"];
 
-  final List<MasjidModel> myMasjid = [
-    MasjidModel(
-      masjidName: "Masjid Jami’ At Taqwa",
-      masjidLocation: "Ciracas, Jakarta Timur",
-      masjidImage: "assets/images/image-masjid.png",
-      masjidSlug: "Masjid-Jami-At-Taqwa",
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
     context.read<MasjidCubit>().fetchMasjids();
+    context.read<MasjidFollowedCubit>().fetchFollowedMasjids();
   }
 
   @override
@@ -39,9 +33,13 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/'),
+        ),
         title: const Text("Cari Masjid"),
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -97,11 +95,7 @@ class _SearchMasjidScreenState extends State<SearchMasjidScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: MasjidListSection(
-                selectedTab: selectedTab,
-                query: query,
-                myMasjid: myMasjid,
-              ),
+              child: MasjidListSection(selectedTab: selectedTab, query: query),
             ),
           ],
         ),

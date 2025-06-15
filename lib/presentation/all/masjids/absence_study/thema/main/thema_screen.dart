@@ -203,12 +203,14 @@ class _NavigationMenuGrid extends StatelessWidget {
       {
         "icon": Icons.menu_book,
         "label": "Materi Lengkap",
-        "route": "/masjid/$masjidSlug/absence-study/thema-study/transcription",
+        "route":
+            "/masjid/$masjidSlug/absence-study/thema-study/transcription/$lectureId",
       },
       {
         "icon": Icons.notes_outlined,
         "label": "Ringkasan",
-        "route": "/masjid/$masjidSlug/absence-study/thema-study/summary",
+        "route":
+            "/masjid/$masjidSlug/absence-study/thema-study/summary/$lectureId",
       },
       {
         "icon": Icons.question_answer_outlined,
@@ -224,6 +226,12 @@ class _NavigationMenuGrid extends StatelessWidget {
         "icon": Icons.feedback_outlined,
         "label": "Masukan dan Saran",
         "route": "/masjid/$masjidSlug/absence-study/thema-study/suggestion",
+      },
+      {
+        "icon": Icons.feedback_outlined,
+        "label": "Dokumen",
+        "route":
+            "/masjid/$masjidSlug/absence-study/thema-study/document/$lectureId",
       },
       {
         "icon": Icons.pie_chart_outline,

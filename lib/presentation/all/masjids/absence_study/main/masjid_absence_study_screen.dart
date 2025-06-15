@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:masjidku/core/constants/app_spacing.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lecture_sessions_state.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/cubit/masjid_lectures_cubit.dart';
@@ -243,7 +244,7 @@ class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
                                     onTap: () {
                                       context.push(
                                         '/masjid/$masjidSlug/absence-study/thema-study',
-                                         extra: {
+                                        extra: {
                                           'data': lecture, // MasjidLectureModel
                                           'masjidSlug': masjidSlug,
                                         },
@@ -287,19 +288,19 @@ class _MasjidAbsenceStudyScreenState extends State<MasjidAbsenceStudyScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      AppSpacing.md,
                       _TemaListCard(
                         title: "Januari",
                         subtitle: "12 Kajian dilaksanakan",
                         onTap: () {},
                       ),
-                      const SizedBox(height: 12),
+                      AppSpacing.md,
                       _TemaListCard(
                         title: "Februari",
                         subtitle: "12 Kajian dilaksanakan",
                         onTap: () {},
                       ),
-                      const SizedBox(height: 12),
+                      AppSpacing.md,
                       _TemaListCard(
                         title: "Maret",
                         subtitle: "12 Kajian dilaksanakan",

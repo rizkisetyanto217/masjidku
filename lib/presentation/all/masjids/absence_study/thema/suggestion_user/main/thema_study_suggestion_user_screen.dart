@@ -37,7 +37,7 @@ class _DetailThemaStudySuggestionUserScreenState
               decoration: InputDecoration(
                 hintText: "Tulis disini",
                 filled: true,
-                fillColor: const Color(0xFFF8F8F8),
+                // fillColor: const Color(0xFFF8F8F8),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: Color(0xFFDDDDDD)),

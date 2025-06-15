@@ -94,6 +94,7 @@ class _MasjidContent extends StatefulWidget {
 
 class _MasjidContentState extends State<_MasjidContent> {
   int selectedTabIndex = 0;
+  late SelectedMasjidCubit selectedMasjidCubit; // ✅ Tambahkan ini
 
   final List<Map<String, dynamic>> posts = [
     {
@@ -105,8 +106,19 @@ class _MasjidContentState extends State<_MasjidContent> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    selectedMasjidCubit =
+        context
+            .read<
+              SelectedMasjidCubit
+            >(); // ✅ Ambil cubit saat widget masih aktif
+  }
+
+  @override
   void dispose() {
-    context.read<SelectedMasjidCubit>().clearMasjid();
+    selectedMasjidCubit
+        .clearMasjid(); // ✅ Gunakan cubit langsung, bukan context
     super.dispose();
   }
 
@@ -158,6 +170,8 @@ class _MasjidContentState extends State<_MasjidContent> {
                       if (result == true || !currentFollowing) {
                         final newStatus = !currentFollowing;
                         await followCubit.setFollowApi(newStatus);
+
+                        if (!mounted) return;
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

@@ -4,8 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
 import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/model/masjid_lectures_model.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/study/main/cubit/material_asset_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/document/pdf_viewer_screen.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/document/thema_doc_screen.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/thema/quiz/cubit/thema_study_quiz_cubit.dart';
-import 'package:masjidku/presentation/all/masjids/absence_study/thema/video/main/cubit/video_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/summary/summary_view_screen.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/transciption/transcription_view_screen.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/video/cubit/video_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/event/detail/masjid_event_sessions_detail.dart';
 import 'package:masjidku/presentation/all/masjids/event/main/model/masjid_event_sessions_model.dart';
 import 'package:masjidku/presentation/all/masjids/main/cubit/masjid_detail_cubit.dart';
@@ -103,6 +108,36 @@ final List<GoRoute> userExtraRoutes = [
     builder: (_, __) => const MyActivityLessonIncomeScreen(),
   ),
   GoRoute(path: '/my-activity/stats', builder: (_, __) => const StatsScreen()),
+  GoRoute(
+    path: '/pdf-viewer',
+    builder: (context, state) {
+      final extra = state.extra as Map<String, dynamic>;
+      return PdfViewerScreen(title: extra['title'], url: extra['url']);
+    },
+  ),
+  GoRoute(
+    path: '/material-transcript-view',
+    builder: (context, state) {
+      final extra = state.extra as Map<String, dynamic>?;
+
+      final title = extra?['title'] ?? 'Transkrip Materi';
+      final content = extra?['content'] ?? '';
+
+      return TranscriptViewScreen(title: title, content: content);
+    },
+  ),
+  GoRoute(
+    path: '/material-summary-view',
+    builder: (context, state) {
+      final extra = state.extra as Map<String, dynamic>?;
+
+      final title = extra?['title'] ?? 'Ringkasan Materi';
+      final content = extra?['content'] ?? '';
+
+      return SummaryViewScreen(title: title, content: content);
+    },
+  ),
+
   GoRoute(path: '/search', builder: (_, __) => const SearchMasjidScreen()),
   GoRoute(
     path: '/masjid/:slug',
@@ -245,9 +280,7 @@ final List<GoRoute> userExtraRoutes = [
                   if (lectureId != null && masjidId != null) {
                     return BlocProvider(
                       create: (_) => LectureQuizCubit(),
-                      child: ThemaStudyQuizScreen(
-                        lectureId: lectureId,
-                      ),
+                      child: ThemaStudyQuizScreen(lectureId: lectureId),
                     );
                   }
 
@@ -270,8 +303,14 @@ final List<GoRoute> userExtraRoutes = [
                         const DetailThemaStudyInformationScreen(),
               ),
               GoRoute(
-                path: 'transcription',
-                builder: (_, __) => const DetailThemaStudyTranscriptionScreen(),
+                path: 'transcription/:lectureId',
+                builder: (context, state) {
+                  final lectureId = state.pathParameters['lectureId']!;
+                  return BlocProvider(
+                    create: (_) => LectureSessionMaterialAssetCubit(),
+                    child: ThemeStudyTranscriptionScreen(lectureId: lectureId),
+                  );
+                },
               ),
               GoRoute(
                 path: 'stats',
@@ -286,10 +325,28 @@ final List<GoRoute> userExtraRoutes = [
                 builder:
                     (_, __) => const DetailThemaStudySuggestionUserScreen(),
               ),
+
               GoRoute(
-                path: 'summary',
-                builder: (_, __) => const DetailThemaStudySummaryScreen(),
+                path: 'document/:lectureId',
+                builder: (context, state) {
+                  final lectureId = state.pathParameters['lectureId']!;
+                  return BlocProvider(
+                    create: (_) => LectureSessionMaterialAssetCubit(),
+                    child: DocsThemaScreen(lectureId: lectureId),
+                  );
+                },
               ),
+              GoRoute(
+                path: 'summary/:lectureId',
+                builder: (context, state) {
+                  final lectureId = state.pathParameters['lectureId']!;
+                  return BlocProvider(
+                    create: (_) => LectureSessionMaterialAssetCubit(),
+                    child: ThemeStudySummaryScreen(lectureId: lectureId),
+                  );
+                },
+              ),
+
               GoRoute(
                 path: 'video/:lectureId',
                 builder: (context, state) {
@@ -352,7 +409,7 @@ final List<GoRoute> userExtraRoutes = [
 
       GoRoute(
         path: 'agenda',
-        builder: (_, __) => const AgendaMasjidScreen(),
+        builder: (_, __) => const AgendaKajianMasjidScreen(),
         routes: [
           GoRoute(
             path: 'detail',

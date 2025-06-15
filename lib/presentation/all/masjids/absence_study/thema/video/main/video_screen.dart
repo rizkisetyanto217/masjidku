@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:masjidku/presentation/all/masjids/absence_study/thema/video/main/cubit/video_cubit.dart';
+import 'package:masjidku/presentation/all/masjids/absence_study/thema/video/cubit/video_cubit.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'package:masjidku/presentation/all/masjids/absence_study/study/main/cubit/material_asset_cubit.dart';

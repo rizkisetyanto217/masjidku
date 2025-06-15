@@ -10,7 +10,9 @@ class MasjidCubit extends Cubit<MasjidState> {
   Future<void> fetchMasjids() async {
     emit(MasjidLoading());
     try {
-      final response = await Dio().get('${AppConfig.baseUrl}/public/masjids');
+      final response = await Dio().get(
+        '${AppConfig.baseUrl}/public/masjids/verified',
+      );
 
       final List data = response.data['data']; // ✅ field 'data'
       final masjids = data.map((json) => MasjidModel.fromJson(json)).toList();

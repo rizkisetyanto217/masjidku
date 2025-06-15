@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/core/constants/app_spacing.dart';
 
-class AgendaMasjidScreen extends StatefulWidget {
-  const AgendaMasjidScreen({super.key});
+class AgendaKajianMasjidScreen extends StatefulWidget {
+  const AgendaKajianMasjidScreen({super.key});
 
   @override
-  State<AgendaMasjidScreen> createState() => _AgendaMasjidScreenState();
+  State<AgendaKajianMasjidScreen> createState() => _AgendaKajianMasjidScreenState();
 }
 
-class _AgendaMasjidScreenState extends State<AgendaMasjidScreen> {
+class _AgendaKajianMasjidScreenState extends State<AgendaKajianMasjidScreen> {
   final List<String> filters = [
     "Semua",
     "Kajian Rutin",

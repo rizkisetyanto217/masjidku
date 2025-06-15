@@ -48,7 +48,6 @@ class _CollaborationHomeScreenState extends State<CollaborationHomeScreen> {
             MainButton(
               label: "Hubungi Kami",
               onPressed: () {
-                // TODO: Ganti dengan navigasi atau dialog kontak
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Aksi hubungi kami ditekan")),
                 );

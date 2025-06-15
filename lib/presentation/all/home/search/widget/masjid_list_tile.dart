@@ -49,7 +49,7 @@ class MasjidListTile extends StatelessWidget {
       ),
       subtitle: Text(masjid.masjidLocation),
       onTap:
-          () => context.push(
+          () => context.go(
             '/masjid/${masjid.masjidSlug}',
             extra: masjid, // kirim model lengkap
           ),
