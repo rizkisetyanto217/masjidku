@@ -74,13 +74,7 @@ class _MasjidkuMainState extends State<MasjidkuMain> {
                         child: QuickAccessMenu(items: quickAccessItems),
                       ),
                       const SizedBox(height: 16),
-                      PosterCarousel(
-                        imagePaths: [
-                          "assets/images/masjidku-banner.png",
-                          "assets/images/masjidku-banner.png",
-                          "assets/images/masjidku-banner.png",
-                        ],
-                      ),
+                      PosterCarouselDynamic(),
                       const SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),

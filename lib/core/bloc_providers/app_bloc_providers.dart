@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:masjidku/core/utils/auth_cubit.dart';
 import 'package:masjidku/presentation/all/auth/login/service/auth_service.dart';
 import 'package:masjidku/presentation/all/donation/details/search_masjid/cubit/selected_masjid_cubit.dart';
+import 'package:masjidku/presentation/all/home/main/cubit/carousel/carousel_cubit.dart';
 import 'package:masjidku/presentation/all/home/main/cubit/quote/quotes_cubit.dart';
 import 'package:masjidku/presentation/all/home/main/cubit/navigation_cubit.dart';
 import 'package:masjidku/core/themes/theme_cubit.dart';
@@ -51,6 +52,7 @@ class AppBlocProviders extends StatelessWidget {
         BlocProvider(create: (_) => LectureSessionMaterialAssetCubit()),
         BlocProvider(create: (_) => LectureQuizCubit()),
         BlocProvider(create: (_) => MasjidFollowedCubit()),
+        BlocProvider(create: (_) => CarouselCubit()),
       ],
       child: child,
     );

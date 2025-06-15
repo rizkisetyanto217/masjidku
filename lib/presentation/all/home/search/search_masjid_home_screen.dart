@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_cubit.dart';
 import 'package:masjidku/presentation/all/home/search/cubit/masjid_followed_cubit.dart';
-import 'package:masjidku/presentation/all/home/search/model/masjid_model.dart';
 import 'package:masjidku/presentation/all/home/search/widget/masjid_list_section.dart';
 
 class SearchMasjidScreen extends StatefulWidget {

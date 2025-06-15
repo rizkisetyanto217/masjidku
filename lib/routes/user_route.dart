@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/auth/login/login_screen.dart';
 import 'package:masjidku/presentation/all/auth/register/register_screen.dart';
+import 'package:masjidku/presentation/all/home/carousel/carousel_detail_screen.dart';
+import 'package:masjidku/presentation/all/home/main/model/caraousel_model.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/main/model/masjid_lectures_model.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/study/main/cubit/material_asset_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/thema/document/pdf_viewer_screen.dart';
@@ -139,6 +141,14 @@ final List<GoRoute> userExtraRoutes = [
   ),
 
   GoRoute(path: '/search', builder: (_, __) => const SearchMasjidScreen()),
+  GoRoute(
+    path: '/carousel-detail',
+    builder: (context, state) {
+      final carousel = state.extra as CarouselModel;
+      return CarouselDetailScreen(carousel: carousel);
+    },
+  ),
+
   GoRoute(
     path: '/masjid/:slug',
     builder: (context, state) {
