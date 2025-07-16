@@ -10,6 +10,8 @@ class LectureSessionQuizWithUserModel {
   final String? userLectureSessionsQuizUserId;
   final DateTime? userLectureSessionsQuizCreatedAt;
 
+  final String masjidSlug;
+
   LectureSessionQuizWithUserModel({
     required this.lectureSessionsQuizId,
     required this.lectureSessionsQuizTitle,
@@ -20,6 +22,7 @@ class LectureSessionQuizWithUserModel {
     this.userLectureSessionsQuizGradeResult,
     this.userLectureSessionsQuizUserId,
     this.userLectureSessionsQuizCreatedAt,
+    required this.masjidSlug,
   });
 
   factory LectureSessionQuizWithUserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +44,7 @@ class LectureSessionQuizWithUserModel {
           json['user_lecture_sessions_quiz_created_at'] != null
               ? DateTime.parse(json['user_lecture_sessions_quiz_created_at'])
               : null,
+      masjidSlug: json['masjid_slug'] ?? 'unknown',
     );
   }
 

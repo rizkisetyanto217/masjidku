@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/thema/quiz/cubit/thema_study_quiz_cubit.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/thema/quiz/cubit/thema_study_quiz_state.dart';
 import 'package:masjidku/presentation/all/masjids/absence_study/widgets/status_tag_component.dart';
@@ -10,10 +11,7 @@ import 'package:intl/intl.dart';
 class ThemaStudyQuizScreen extends StatefulWidget {
   final String lectureId;
 
-  const ThemaStudyQuizScreen({
-    super.key,
-    required this.lectureId,
-  });
+  const ThemaStudyQuizScreen({super.key, required this.lectureId});
 
   @override
   State<ThemaStudyQuizScreen> createState() => _ThemaStudyQuizScreenState();
@@ -82,7 +80,13 @@ class _ThemaStudyQuizScreenState extends State<ThemaStudyQuizScreen> {
                       ),
                     ],
                     onTap: () {
-                      // TODO: buka halaman detail quiz
+                      context.push(
+                        '/masjid/${quiz.masjidSlug}/absence-study/study/${quiz.lectureSessionsQuizLectureSessionId}/quiz',
+                        extra: {
+                          'quizId': quiz.lectureSessionsQuizId,
+                          'quiz': quiz,
+                        },
+                      );
                     },
                   ),
                 );

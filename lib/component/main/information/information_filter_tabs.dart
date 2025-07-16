@@ -13,7 +13,7 @@ class InformationFilterTabs extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SizedBox(
       height: 48,
       child: ListView.separated(

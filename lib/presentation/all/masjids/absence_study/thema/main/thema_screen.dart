@@ -197,7 +197,8 @@ class _NavigationMenuGrid extends StatelessWidget {
         "route": "/masjid/$masjidSlug/absence-study/thema-study/quiz",
         "extra": {
           "lectureId": lectureId,
-          "lecture": lecture, // bisa juga jika kamu ingin seluruh model
+          "lecture": lecture,
+          "masjidSlug": masjidSlug,
         },
       },
       {

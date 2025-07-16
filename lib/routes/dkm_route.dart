@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:masjidku/presentation/dkm/home/absence_study/details/study/details/faq/main/dkm_study_faq_screen.dart';
-import 'package:masjidku/presentation/dkm/home/main/dkm_main_screen.dart';
+import 'package:masjidku/presentation/dashboard/home/absence_study/details/study/details/faq/main/dkm_study_faq_screen.dart';
+import 'package:masjidku/presentation/dashboard/home/main/dkm_main_screen.dart';
 import 'pages_router.dart';
 
 final ShellRoute dkmRoutes = ShellRoute(
